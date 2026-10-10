@@ -1,96 +1,74 @@
 #!/usr/bin/env pwsh
 # ═══════════════════════════════════════════════════════════════
-#  DevMind Auto-Push Watcher
-#  Watches devmind/ folder for changes and auto-pushes to GitHub
+#  DevMind Auto-Push Watcher  (run this in a terminal window)
+#  Just double-click or run:  powershell -ExecutionPolicy Bypass -File auto-push.ps1
 # ═══════════════════════════════════════════════════════════════
 
-$watchPath = "C:\Users\ADMIN\OneDrive\Desktop\bob files"
-$repoPath  = "C:\Users\ADMIN\OneDrive\Desktop\bob files"
-$interval  = 10  # seconds between checks
+$repoPath = "C:\Users\ADMIN\OneDrive\Desktop\bob files"
+$logFile  = "$repoPath\auto-push.log"
+
+function Write-Log($msg, $color = "White") {
+    $line = "[$(Get-Date -Format 'HH:mm:ss')] $msg"
+    Write-Host $line -ForegroundColor $color
+    Add-Content -Path $logFile -Value $line
+}
 
 Write-Host ""
-Write-Host "═══════════════════════════════════════════════" -ForegroundColor Cyan
-Write-Host "  🧠 DevMind Auto-Push Watcher" -ForegroundColor Cyan
-Write-Host "═══════════════════════════════════════════════" -ForegroundColor Cyan
-Write-Host "  Watching : $watchPath" -ForegroundColor Gray
-Write-Host "  Interval : Every $interval seconds" -ForegroundColor Gray
-Write-Host "  Press Ctrl+C to stop" -ForegroundColor Gray
-Write-Host "═══════════════════════════════════════════════" -ForegroundColor Cyan
+Write-Host "╔══════════════════════════════════════════════╗" -ForegroundColor Cyan
+Write-Host "║   🧠 DevMind — GitHub Auto-Push Watcher     ║" -ForegroundColor Cyan
+Write-Host "║   Every change saves to GitHub automatically ║" -ForegroundColor Cyan
+Write-Host "║   Press Ctrl+C to stop                       ║" -ForegroundColor Cyan
+Write-Host "╚══════════════════════════════════════════════╝" -ForegroundColor Cyan
 Write-Host ""
 
-# Set up FileSystemWatcher
-$watcher = New-Object System.IO.FileSystemWatcher
-$watcher.Path = $watchPath
-$watcher.IncludeSubdirectories = $true
-$watcher.EnableRaisingEvents = $true
-$watcher.Filter = "*.*"
-$watcher.NotifyFilter = [System.IO.NotifyFilters]::LastWrite -bor [System.IO.NotifyFilters]::FileName
+Set-Location $repoPath
 
-$pendingPush = $false
-$lastPushTime = Get-Date
+# Verify git remote
+$remote = git remote get-url origin 2>&1
+Write-Log "Repo   : $repoPath" "Gray"
+Write-Log "Remote : $remote" "Gray"
+Write-Log "Watching for changes every 15 seconds..." "Green"
+Write-Host ""
 
-function Push-ToGitHub {
-    param([string]$message)
+$lastHash = ""
+
+while ($true) {
+    Start-Sleep -Seconds 15
+
     Set-Location $repoPath
+
+    # Get current status hash to detect real changes
     $status = git status --porcelain 2>&1
-    if ($status) {
-        Write-Host ""
-        Write-Host "  📦 Changes detected — pushing to GitHub..." -ForegroundColor Yellow
+    $currentHash = ($status | Out-String).Trim()
+
+    if ($currentHash -ne "" -and $currentHash -ne $lastHash) {
+        $lastHash = $currentHash
+
+        # Show what changed
+        $files = ($status | ForEach-Object { $_.Trim().Substring(3) }) -join ", "
+        Write-Log "📝 Changes: $files" "Yellow"
+
+        # Stage all changes
         git add -A 2>&1 | Out-Null
-        git commit -m $message 2>&1 | Out-Null
-        $pushResult = git push origin main 2>&1
+
+        # Auto commit message with timestamp
+        $commitMsg = "⚡ Auto-update [$(Get-Date -Format 'MMM dd HH:mm')]"
+        git commit -m $commitMsg 2>&1 | Out-Null
+
+        # Push
+        $push = git push origin main 2>&1
         if ($LASTEXITCODE -eq 0) {
-            Write-Host "  ✅ Pushed successfully at $(Get-Date -Format 'HH:mm:ss')" -ForegroundColor Green
-            Write-Host "  📝 Commit: $message" -ForegroundColor Gray
+            Write-Log "✅ Pushed to GitHub: $commitMsg" "Green"
         } else {
-            Write-Host "  ❌ Push failed: $pushResult" -ForegroundColor Red
-        }
-        Write-Host ""
-    }
-}
-
-# Register change events
-$onChange = Register-ObjectEvent $watcher "Changed" -Action {
-    $global:pendingPush = $true
-}
-$onCreated = Register-ObjectEvent $watcher "Created" -Action {
-    $global:pendingPush = $true
-}
-$onDeleted = Register-ObjectEvent $watcher "Deleted" -Action {
-    $global:pendingPush = $true
-}
-$onRenamed = Register-ObjectEvent $watcher "Renamed" -Action {
-    $global:pendingPush = $true
-}
-
-Write-Host "  👁️  Watching for file changes..." -ForegroundColor Green
-
-try {
-    while ($true) {
-        Start-Sleep -Seconds $interval
-
-        if ($pendingPush) {
-            $now = Get-Date
-            $secsSinceLastPush = ($now - $lastPushTime).TotalSeconds
-
-            # Debounce — wait at least 8 seconds after last change before pushing
-            if ($secsSinceLastPush -ge 8) {
-                $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm"
-                $changedFiles = (git -C $repoPath status --porcelain 2>&1) -join ", "
-                $commitMsg = "⚡ Auto-update: $timestamp"
-                Push-ToGitHub -message $commitMsg
-                $pendingPush = $false
-                $lastPushTime = Get-Date
+            Write-Log "❌ Push failed: $push" "Red"
+            # Try once more
+            Start-Sleep -Seconds 5
+            git push origin main 2>&1 | Out-Null
+            if ($LASTEXITCODE -eq 0) {
+                Write-Log "✅ Retry succeeded!" "Green"
             }
         }
+    } else {
+        Write-Host "." -NoNewline -ForegroundColor DarkGray
     }
-} finally {
-    # Cleanup on Ctrl+C
-    Unregister-Event -SourceIdentifier $onChange.Name    -ErrorAction SilentlyContinue
-    Unregister-Event -SourceIdentifier $onCreated.Name  -ErrorAction SilentlyContinue
-    Unregister-Event -SourceIdentifier $onDeleted.Name  -ErrorAction SilentlyContinue
-    Unregister-Event -SourceIdentifier $onRenamed.Name  -ErrorAction SilentlyContinue
-    $watcher.Dispose()
-    Write-Host ""
-    Write-Host "  🛑 Watcher stopped." -ForegroundColor Red
 }
