@@ -6,821 +6,248 @@
   <title>DevMind – AI Learning Accelerator</title>
   <style>
     :root {
-      --bg: #0d1117;
-      --surface: #161b22;
-      --surface2: #21262d;
-      --border: #30363d;
-      --text: #e6edf3;
-      --muted: #8b949e;
-      --accent: #58a6ff;
-      --accent2: #bc8cff;
-      --green: #3fb950;
-      --yellow: #d29922;
-      --red: #f85149;
-      --orange: #f0883e;
+      --bg: #0d1117; --surface: #161b22; --surface2: #21262d;
+      --border: #30363d; --text: #e6edf3; --muted: #8b949e;
+      --accent: #58a6ff; --accent2: #bc8cff; --green: #3fb950;
+      --yellow: #d29922; --red: #f85149; --orange: #f0883e;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 15px; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system,"Segoe UI",system-ui,sans-serif; min-height:100vh; display:flex; flex-direction:column; }
 
-    /* ─── NAV ─── */
-    nav {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-      height: 58px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.2rem;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-    }
-    .nav-brand .logo-icon {
-      width: 32px; height: 32px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px;
-    }
-    .nav-tabs {
-      display: flex;
-      gap: 4px;
-    }
-    .nav-tab {
-      background: none;
-      border: none;
-      color: var(--muted);
-      padding: 6px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: all 0.15s;
-    }
-    .nav-tab:hover { background: var(--surface2); color: var(--text); }
-    .nav-tab.active { background: var(--surface2); color: var(--accent); }
-    .nav-badge {
-      background: var(--accent);
-      color: #000;
-      font-size: 0.65rem;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 10px;
-      margin-left: 4px;
-    }
+    /* NAV */
+    nav { background:var(--surface); border-bottom:1px solid var(--border); padding:0 1.5rem; height:56px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+    .nav-brand { display:flex; align-items:center; gap:9px; font-size:1.15rem; font-weight:700; }
+    .logo-icon { width:30px; height:30px; background:linear-gradient(135deg,var(--accent),var(--accent2)); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:15px; }
+    .nav-tabs { display:flex; gap:2px; }
+    .nav-tab { background:none; border:none; color:var(--muted); padding:6px 13px; border-radius:6px; cursor:pointer; font-size:0.875rem; font-weight:500; transition:all .15s; }
+    .nav-tab:hover { background:var(--surface2); color:var(--text); }
+    .nav-tab.active { background:var(--surface2); color:var(--accent); }
+    .api-key-btn { background:var(--surface2); border:1px solid var(--border); color:var(--muted); padding:5px 12px; border-radius:6px; cursor:pointer; font-size:0.78rem; display:flex; align-items:center; gap:6px; transition:all .15s; }
+    .api-key-btn:hover { border-color:var(--accent); color:var(--accent); }
+    .api-dot { width:7px; height:7px; border-radius:50%; background:var(--red); }
+    .api-dot.ok { background:var(--green); }
 
-    /* ─── MAIN LAYOUT ─── */
-    .app {
-      display: flex;
-      flex: 1;
-      max-width: 1400px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 24px 20px;
-      gap: 20px;
-    }
+    /* LAYOUT */
+    .app { display:flex; flex:1; max-width:1380px; width:100%; margin:0 auto; padding:20px 16px; gap:18px; }
+    .sidebar { width:250px; flex-shrink:0; display:flex; flex-direction:column; gap:12px; }
+    .main { flex:1; min-width:0; display:flex; flex-direction:column; gap:18px; }
 
-    /* ─── SIDEBAR ─── */
-    .sidebar {
-      width: 260px;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .xp-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 18px;
-    }
-    .xp-card h4 { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
-    .xp-level {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--accent);
-    }
-    .xp-label { font-size: 0.8rem; color: var(--muted); margin-bottom: 10px; }
-    .xp-bar {
-      background: var(--surface2);
-      border-radius: 4px;
-      height: 6px;
-      overflow: hidden;
-    }
-    .xp-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      border-radius: 4px;
-      transition: width 0.6s ease;
-    }
-    .xp-sub { font-size: 0.75rem; color: var(--muted); margin-top: 6px; }
+    /* SIDEBAR */
+    .xp-card,.topics-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; }
+    .xp-card h4,.topics-card h4 { font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:10px; }
+    .xp-level { font-size:1.5rem; font-weight:700; color:var(--accent); }
+    .xp-label { font-size:0.78rem; color:var(--muted); margin-bottom:8px; }
+    .xp-bar { background:var(--surface2); border-radius:4px; height:6px; overflow:hidden; }
+    .xp-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:4px; transition:width .6s ease; }
+    .xp-sub { font-size:0.72rem; color:var(--muted); margin-top:5px; }
+    .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .stat-box { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:11px; text-align:center; }
+    .stat-num { font-size:1.3rem; font-weight:700; }
+    .stat-lbl { font-size:0.68rem; color:var(--muted); margin-top:2px; }
+    .topic-item { display:flex; align-items:center; gap:9px; padding:7px 9px; border-radius:7px; cursor:pointer; transition:background .12s; margin-bottom:3px; }
+    .topic-item:hover { background:var(--surface2); }
+    .topic-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .topic-name { font-size:0.82rem; flex:1; }
+    .topic-pct { font-size:0.72rem; color:var(--muted); }
 
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-    .stat-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px;
-      text-align: center;
-    }
-    .stat-num { font-size: 1.4rem; font-weight: 700; }
-    .stat-lbl { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+    /* PANELS */
+    .panel { display:none; flex-direction:column; gap:18px; }
+    .panel.active { display:flex; }
 
-    .topics-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 18px;
-    }
-    .topics-card h4 { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
-    .topic-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.12s;
-      margin-bottom: 4px;
-    }
-    .topic-item:hover { background: var(--surface2); }
-    .topic-item.active { background: rgba(88,166,255,0.12); }
-    .topic-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .topic-name { font-size: 0.85rem; flex: 1; }
-    .topic-pct { font-size: 0.75rem; color: var(--muted); }
+    /* CARD */
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px; }
+    .card-title { font-size:1rem; font-weight:600; margin-bottom:5px; display:flex; align-items:center; gap:8px; }
+    .card-sub { font-size:0.83rem; color:var(--muted); margin-bottom:14px; }
 
-    /* ─── MAIN CONTENT ─── */
-    .main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+    /* BUTTONS */
+    .btn { display:inline-flex; align-items:center; gap:6px; padding:8px 17px; border-radius:8px; font-size:0.875rem; font-weight:600; cursor:pointer; border:none; transition:all .15s; }
+    .btn-primary { background:var(--accent); color:#000; }
+    .btn-primary:hover { background:#79c0ff; }
+    .btn-secondary { background:var(--surface2); border:1px solid var(--border); color:var(--text); }
+    .btn-secondary:hover { border-color:var(--accent); color:var(--accent); }
+    .btn-red { background:var(--red); color:#fff; }
+    .btn-red:hover { opacity:.85; }
+    .btn-purple { background:var(--accent2); color:#000; }
+    .btn-purple:hover { opacity:.85; }
+    .btn:disabled { opacity:.5; cursor:not-allowed; }
+    .btn-row { display:flex; gap:9px; margin-top:13px; flex-wrap:wrap; }
 
-    /* ─── PANELS ─── */
-    .panel {
-      display: none;
-      flex-direction: column;
-      gap: 20px;
-    }
-    .panel.active { display: flex; }
+    /* SPINNER */
+    .spinner { width:13px; height:13px; border:2px solid rgba(0,0,0,.25); border-top-color:#000; border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0; }
+    .spinner-w { border-color:rgba(255,255,255,.25); border-top-color:#fff; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:none; } }
+    @keyframes fadeSlide { from { opacity:0; transform:translateX(-6px); } to { opacity:1; transform:none; } }
 
-    /* ─── CARD ─── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 22px;
-    }
-    .card-title {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .card-sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 16px; }
+    /* LANG BUTTONS */
+    .lang-select-row { display:flex; gap:7px; margin-bottom:11px; flex-wrap:wrap; }
+    .lang-btn { background:var(--surface2); border:1px solid var(--border); color:var(--muted); padding:4px 13px; border-radius:20px; cursor:pointer; font-size:0.78rem; font-weight:500; transition:all .15s; }
+    .lang-btn:hover { border-color:var(--accent); color:var(--text); }
+    .lang-btn.active { background:rgba(88,166,255,.15); border-color:var(--accent); color:var(--accent); }
 
-    /* ─── CODE EXPLAINER ─── */
-    .lang-select-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-    }
-    .lang-btn {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      padding: 5px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 500;
-      transition: all 0.15s;
-    }
-    .lang-btn:hover { border-color: var(--accent); color: var(--text); }
-    .lang-btn.active { background: rgba(88,166,255,0.15); border-color: var(--accent); color: var(--accent); }
+    /* TEXTAREA */
+    .code-input { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:"Cascadia Code","Fira Code","Courier New",monospace; font-size:0.83rem; line-height:1.7; padding:13px; resize:vertical; min-height:180px; outline:none; transition:border-color .15s; }
+    .code-input:focus { border-color:var(--accent); }
+    .code-input::placeholder { color:var(--muted); }
+    .error-input { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:8px; color:var(--red); font-family:monospace; font-size:0.81rem; line-height:1.7; padding:12px 13px; resize:vertical; min-height:110px; outline:none; transition:border-color .15s; }
+    .error-input:focus { border-color:var(--red); }
 
-    .code-input-wrap {
-      position: relative;
-    }
-    .code-input {
-      width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      font-family: "Cascadia Code", "Fira Code", "Courier New", monospace;
-      font-size: 0.85rem;
-      line-height: 1.7;
-      padding: 14px;
-      resize: vertical;
-      min-height: 180px;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    .code-input:focus { border-color: var(--accent); }
-    .code-input::placeholder { color: var(--muted); }
+    /* API KEY MODAL */
+    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:999; display:none; align-items:center; justify-content:center; }
+    .modal-overlay.show { display:flex; }
+    .modal { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:28px; width:480px; max-width:94vw; animation:fadeIn .25s ease; }
+    .modal h3 { font-size:1.05rem; font-weight:700; margin-bottom:6px; }
+    .modal p { font-size:0.83rem; color:var(--muted); margin-bottom:16px; line-height:1.6; }
+    .modal input { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:8px; color:var(--text); padding:10px 13px; font-size:0.875rem; outline:none; margin-bottom:12px; transition:border-color .15s; }
+    .modal input:focus { border-color:var(--accent); }
+    .modal-btns { display:flex; gap:9px; }
+    .modal-note { font-size:0.75rem; color:var(--muted); margin-top:12px; line-height:1.6; padding:10px; background:var(--surface2); border-radius:8px; }
+    .modal-note a { color:var(--accent); text-decoration:none; }
 
-    .btn-row { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 8px 18px;
-      border-radius: 8px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: all 0.15s;
-    }
-    .btn-primary { background: var(--accent); color: #000; }
-    .btn-primary:hover { background: #79c0ff; }
-    .btn-secondary { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
-    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-    .btn-purple { background: var(--accent2); color: #000; }
-    .btn-purple:hover { opacity: 0.85; }
-    .btn-green { background: var(--green); color: #000; }
-    .btn-green:hover { opacity: 0.85; }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    /* AI OUTPUT BOX */
+    .ai-output { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:18px; margin-top:16px; display:none; animation:fadeIn .3s ease; }
+    .ai-output.show { display:block; }
+    .ai-output h3 { font-size:0.92rem; font-weight:600; color:var(--accent); margin-bottom:13px; display:flex; align-items:center; gap:7px; }
 
-    /* Spinner */
-    .spinner {
-      width: 14px; height: 14px;
-      border: 2px solid rgba(0,0,0,0.3);
-      border-top-color: #000;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    /* MARKDOWN RENDERED OUTPUT */
+    .md-content { font-size:0.875rem; line-height:1.75; color:var(--text); }
+    .md-content h1,.md-content h2 { font-size:1rem; font-weight:700; margin:14px 0 7px; color:var(--accent); }
+    .md-content h3 { font-size:0.92rem; font-weight:600; margin:12px 0 6px; color:var(--accent2); }
+    .md-content p { margin-bottom:10px; }
+    .md-content ul,.md-content ol { padding-left:20px; margin-bottom:10px; }
+    .md-content li { margin-bottom:5px; }
+    .md-content code { background:var(--surface2); border-radius:4px; padding:1px 6px; font-family:monospace; font-size:0.8rem; color:var(--orange); }
+    .md-content pre { background:var(--surface2); border-radius:8px; padding:13px 15px; margin:10px 0; overflow-x:auto; border:1px solid var(--border); }
+    .md-content pre code { background:none; padding:0; color:var(--green); font-size:0.82rem; }
+    .md-content strong { color:var(--text); font-weight:600; }
+    .md-content blockquote { border-left:3px solid var(--accent); padding-left:12px; color:var(--muted); margin:10px 0; }
+    .md-content table { width:100%; border-collapse:collapse; margin:10px 0; font-size:0.82rem; }
+    .md-content th { background:var(--surface2); padding:8px 12px; text-align:left; border:1px solid var(--border); color:var(--accent); }
+    .md-content td { padding:7px 12px; border:1px solid var(--border); }
+    .md-content tr:nth-child(even) td { background:rgba(255,255,255,.02); }
+    .md-content hr { border:none; border-top:1px solid var(--border); margin:14px 0; }
 
-    /* ─── EXPLANATION OUTPUT ─── */
-    .explanation-box {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 18px;
-      margin-top: 18px;
-      display: none;
-    }
-    .explanation-box.show { display: block; }
-    .explanation-box h3 {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--accent);
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .step-list { list-style: none; }
-    .step-item {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 14px;
-      animation: fadeIn 0.35s ease both;
-    }
-    .step-item:nth-child(1) { animation-delay: 0.05s; }
-    .step-item:nth-child(2) { animation-delay: 0.12s; }
-    .step-item:nth-child(3) { animation-delay: 0.19s; }
-    .step-item:nth-child(4) { animation-delay: 0.26s; }
-    .step-item:nth-child(5) { animation-delay: 0.33s; }
-    .step-item:nth-child(6) { animation-delay: 0.4s; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    /* QUIZ */
+    .topic-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:9px; margin-bottom:4px; }
+    .topic-card { background:var(--surface2); border:2px solid var(--border); border-radius:10px; padding:13px 9px; text-align:center; cursor:pointer; transition:all .15s; }
+    .topic-card:hover { border-color:var(--accent); }
+    .topic-card.selected { border-color:var(--accent); background:rgba(88,166,255,.1); }
+    .topic-card .t-icon { font-size:1.5rem; margin-bottom:5px; }
+    .topic-card .t-name { font-size:0.78rem; font-weight:600; }
+    .diff-row { display:flex; gap:8px; }
+    .diff-btn { flex:1; padding:8px; border-radius:8px; border:2px solid var(--border); background:var(--surface2); color:var(--muted); cursor:pointer; font-size:0.8rem; font-weight:600; text-align:center; transition:all .15s; }
+    .diff-btn:hover { border-color:var(--muted); color:var(--text); }
+    .diff-btn.selected { border-color:var(--accent); color:var(--accent); background:rgba(88,166,255,.1); }
+    .quiz-active { display:none; flex-direction:column; gap:16px; }
+    .quiz-active.show { display:flex; }
+    .quiz-setup.hide { display:none; }
+    .quiz-progress-bar { background:var(--surface2); border-radius:4px; height:5px; overflow:hidden; }
+    .quiz-progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:4px; transition:width .4s ease; }
+    .quiz-meta { display:flex; justify-content:space-between; font-size:0.79rem; color:var(--muted); }
+    .question-card { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:20px; animation:fadeIn .3s ease; }
+    .question-num { font-size:0.72rem; color:var(--muted); margin-bottom:7px; text-transform:uppercase; letter-spacing:.5px; }
+    .question-text { font-size:0.97rem; font-weight:600; line-height:1.5; margin-bottom:16px; }
+    .question-code { background:var(--surface2); border-radius:8px; padding:11px 13px; font-family:monospace; font-size:0.81rem; color:var(--orange); margin-bottom:14px; white-space:pre; overflow-x:auto; }
+    .options-list { display:flex; flex-direction:column; gap:9px; }
+    .option-btn { background:var(--surface2); border:2px solid var(--border); border-radius:10px; padding:11px 15px; color:var(--text); text-align:left; cursor:pointer; font-size:0.86rem; display:flex; align-items:center; gap:11px; transition:all .15s; }
+    .option-btn:hover:not(:disabled) { border-color:var(--accent); background:rgba(88,166,255,.07); }
+    .option-btn.correct { border-color:var(--green); background:rgba(63,185,80,.1); color:var(--green); }
+    .option-btn.wrong { border-color:var(--red); background:rgba(248,81,73,.1); color:var(--red); }
+    .option-letter { width:24px; height:24px; border:1.5px solid currentColor; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.72rem; font-weight:700; flex-shrink:0; }
+    .explanation-reveal { background:rgba(63,185,80,.07); border:1px solid rgba(63,185,80,.2); border-radius:8px; padding:13px; font-size:0.84rem; color:var(--text); line-height:1.6; display:none; }
+    .explanation-reveal.show { display:block; animation:fadeIn .3s ease; }
+    .quiz-results { display:none; flex-direction:column; gap:14px; animation:fadeIn .4s ease; }
+    .quiz-results.show { display:flex; }
+    .results-header { text-align:center; padding:22px; background:var(--bg); border:1px solid var(--border); border-radius:12px; }
+    .results-score { font-size:2.8rem; font-weight:800; background:linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .results-breakdown { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
+    .breakdown-item { background:var(--surface2); border-radius:10px; padding:13px; text-align:center; }
+    .breakdown-num { font-size:1.35rem; font-weight:700; }
+    .breakdown-lbl { font-size:0.72rem; color:var(--muted); margin-top:3px; }
 
-    .step-num {
-      width: 24px; height: 24px;
-      background: rgba(88,166,255,0.15);
-      color: var(--accent);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 700;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-    .step-content { flex: 1; }
-    .step-title { font-size: 0.88rem; font-weight: 600; margin-bottom: 3px; }
-    .step-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
-    .step-code {
-      background: var(--surface2);
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-family: monospace;
-      font-size: 0.8rem;
-      color: var(--orange);
-      margin-top: 6px;
-      overflow-x: auto;
-    }
-    .concept-tags {
-      display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px;
-    }
-    .tag {
-      background: rgba(188,140,255,0.12);
-      border: 1px solid rgba(188,140,255,0.3);
-      color: var(--accent2);
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 500;
-    }
-    .complexity-row {
-      display: flex; align-items: center; gap: 10px; margin-top: 14px;
-      padding-top: 14px; border-top: 1px solid var(--border);
-    }
-    .complexity-label { font-size: 0.8rem; color: var(--muted); }
-    .complexity-badge {
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-    .c-easy { background: rgba(63,185,80,0.15); color: var(--green); }
-    .c-medium { background: rgba(210,153,34,0.15); color: var(--yellow); }
-    .c-hard { background: rgba(248,81,73,0.15); color: var(--red); }
+    /* CHAT */
+    .chat-window { background:var(--bg); border:1px solid var(--border); border-radius:12px; height:420px; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:11px; scroll-behavior:smooth; }
+    .chat-msg { display:flex; gap:9px; animation:fadeSlide .25s ease; }
+    .chat-avatar { width:29px; height:29px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.78rem; flex-shrink:0; margin-top:2px; }
+    .avatar-ai { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#000; font-weight:700; }
+    .avatar-user { background:var(--surface2); border:1px solid var(--border); }
+    .chat-bubble { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:10px 13px; font-size:0.86rem; line-height:1.65; max-width:calc(100% - 40px); }
+    .chat-msg.user .chat-bubble { background:rgba(88,166,255,.1); border-color:rgba(88,166,255,.3); }
+    .chat-msg.user { flex-direction:row-reverse; }
+    .chat-input-row { display:flex; gap:9px; margin-top:11px; }
+    .chat-input { flex:1; background:var(--bg); border:1px solid var(--border); border-radius:8px; color:var(--text); padding:10px 13px; font-size:0.875rem; outline:none; transition:border-color .15s; }
+    .chat-input:focus { border-color:var(--accent); }
+    .chat-input::placeholder { color:var(--muted); }
+    .suggest-chips { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:11px; }
+    .chip { background:var(--surface2); border:1px solid var(--border); color:var(--muted); padding:5px 11px; border-radius:20px; font-size:0.76rem; cursor:pointer; transition:all .15s; }
+    .chip:hover { border-color:var(--accent); color:var(--accent); }
+    .typing-dot { width:6px; height:6px; border-radius:50%; background:var(--muted); animation:bounce 1.2s infinite; display:inline-block; margin:0 2px; }
+    .typing-dot:nth-child(2) { animation-delay:.2s; }
+    .typing-dot:nth-child(3) { animation-delay:.4s; }
+    @keyframes bounce { 0%,80%,100% { transform:translateY(0); } 40% { transform:translateY(-6px); } }
 
-    /* ─── QUIZ ─── */
-    .quiz-setup {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .topic-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 10px;
-      margin-bottom: 4px;
-    }
-    .topic-card {
-      background: var(--surface2);
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .topic-card:hover { border-color: var(--accent); }
-    .topic-card.selected { border-color: var(--accent); background: rgba(88,166,255,0.1); }
-    .topic-card .t-icon { font-size: 1.6rem; margin-bottom: 6px; }
-    .topic-card .t-name { font-size: 0.8rem; font-weight: 600; }
+    /* DASHBOARD */
+    .hero-banner { background:linear-gradient(135deg,rgba(88,166,255,.08),rgba(188,140,255,.08)); border:1px solid rgba(88,166,255,.2); border-radius:12px; padding:20px 22px; display:flex; align-items:center; gap:18px; }
+    .hero-icon { font-size:2.2rem; flex-shrink:0; }
+    .hero-text h2 { font-size:1.1rem; font-weight:700; margin-bottom:4px; }
+    .hero-text p { font-size:0.83rem; color:var(--muted); line-height:1.5; }
+    .hero-actions { display:flex; gap:7px; margin-top:11px; flex-wrap:wrap; }
+    .roadmap-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:11px; }
+    .roadmap-card { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:15px; cursor:pointer; transition:all .15s; position:relative; overflow:hidden; }
+    .roadmap-card:hover { border-color:var(--accent); transform:translateY(-1px); }
+    .roadmap-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+    .rm-js::before { background:#f7df1e; } .rm-py::before { background:#3572A5; }
+    .rm-react::before { background:#61dafb; } .rm-node::before { background:#3fb950; }
+    .rm-sql::before { background:#f0883e; } .rm-git::before { background:#f85149; }
+    .rm-icon { font-size:1.6rem; margin-bottom:7px; }
+    .rm-title { font-size:0.88rem; font-weight:600; margin-bottom:3px; }
+    .rm-sub { font-size:0.73rem; color:var(--muted); margin-bottom:10px; }
+    .rm-bar { background:var(--surface2); height:5px; border-radius:4px; overflow:hidden; margin-bottom:5px; }
+    .rm-fill { height:100%; border-radius:4px; }
+    .rm-pct { font-size:0.7rem; color:var(--muted); }
+    .activity-list { display:flex; flex-direction:column; gap:9px; }
+    .activity-item { display:flex; align-items:center; gap:11px; padding:9px 11px; background:var(--bg); border:1px solid var(--border); border-radius:8px; font-size:0.83rem; }
+    .activity-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .activity-time { font-size:0.72rem; color:var(--muted); white-space:nowrap; }
+    .streak-row { display:flex; gap:4px; flex-wrap:wrap; margin-top:9px; }
+    .streak-day { width:26px; height:26px; border-radius:5px; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:0.63rem; color:var(--muted); font-weight:600; }
+    .streak-day.done { background:rgba(63,185,80,.25); color:var(--green); }
+    .streak-day.today { background:rgba(88,166,255,.25); color:var(--accent); border:1px solid var(--accent); }
 
-    .diff-row { display: flex; gap: 8px; }
-    .diff-btn {
-      flex: 1;
-      padding: 8px;
-      border-radius: 8px;
-      border: 2px solid var(--border);
-      background: var(--surface2);
-      color: var(--muted);
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-align: center;
-      transition: all 0.15s;
-    }
-    .diff-btn:hover { border-color: var(--muted); color: var(--text); }
-    .diff-btn.selected { border-color: var(--accent); color: var(--accent); background: rgba(88,166,255,0.1); }
+    /* TWO COL */
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+    @media(max-width:820px) { .two-col { grid-template-columns:1fr; } .sidebar { display:none; } }
 
-    /* Quiz active */
-    .quiz-active { display: none; flex-direction: column; gap: 18px; }
-    .quiz-active.show { display: flex; }
-    .quiz-setup.hide { display: none; }
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-track { background:transparent; }
+    ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
 
-    .quiz-progress-bar {
-      background: var(--surface2);
-      border-radius: 4px;
-      height: 5px;
-      overflow: hidden;
-    }
-    .quiz-progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      border-radius: 4px;
-      transition: width 0.4s ease;
-    }
-    .quiz-meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-bottom: -8px;
-    }
-    .question-card {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 22px;
-      animation: fadeIn 0.3s ease;
-    }
-    .question-num {
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .question-text {
-      font-size: 1rem;
-      font-weight: 600;
-      line-height: 1.5;
-      margin-bottom: 18px;
-    }
-    .question-code {
-      background: var(--surface2);
-      border-radius: 8px;
-      padding: 12px 14px;
-      font-family: monospace;
-      font-size: 0.83rem;
-      color: var(--orange);
-      margin-bottom: 16px;
-      white-space: pre;
-      overflow-x: auto;
-    }
-    .options-list { display: flex; flex-direction: column; gap: 10px; }
-    .option-btn {
-      background: var(--surface2);
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 16px;
-      color: var(--text);
-      text-align: left;
-      cursor: pointer;
-      font-size: 0.875rem;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: all 0.15s;
-    }
-    .option-btn:hover:not(:disabled) { border-color: var(--accent); background: rgba(88,166,255,0.07); }
-    .option-btn.correct { border-color: var(--green); background: rgba(63,185,80,0.1); color: var(--green); }
-    .option-btn.wrong { border-color: var(--red); background: rgba(248,81,73,0.1); color: var(--red); }
-    .option-letter {
-      width: 26px; height: 26px;
-      border: 1.5px solid currentColor;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-    .option-text { flex: 1; }
-    .option-icon { font-size: 1rem; }
+    /* XP TOAST */
+    .xp-toast { position:fixed; bottom:20px; right:20px; background:rgba(88,166,255,.15); border:1px solid rgba(88,166,255,.4); color:var(--accent); padding:7px 13px; border-radius:8px; font-size:0.8rem; font-weight:600; z-index:9999; animation:fadeIn .3s ease; pointer-events:none; }
 
-    .explanation-reveal {
-      background: rgba(63,185,80,0.07);
-      border: 1px solid rgba(63,185,80,0.2);
-      border-radius: 8px;
-      padding: 14px;
-      font-size: 0.85rem;
-      color: var(--text);
-      line-height: 1.6;
-      display: none;
-    }
-    .explanation-reveal.show { display: block; animation: fadeIn 0.3s ease; }
-    .explanation-reveal strong { color: var(--green); }
-
-    .quiz-results {
-      display: none;
-      flex-direction: column;
-      gap: 16px;
-      animation: fadeIn 0.4s ease;
-    }
-    .quiz-results.show { display: flex; }
-    .results-header {
-      text-align: center;
-      padding: 24px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-    }
-    .results-score {
-      font-size: 3rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .results-label { font-size: 0.9rem; color: var(--muted); margin-top: 4px; }
-    .results-breakdown {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-    .breakdown-item {
-      background: var(--surface2);
-      border-radius: 10px;
-      padding: 14px;
-      text-align: center;
-    }
-    .breakdown-num { font-size: 1.4rem; font-weight: 700; }
-    .breakdown-lbl { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
-
-    /* ─── DEBUGGER ─── */
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    @media (max-width: 860px) { .two-col { grid-template-columns: 1fr; } }
-
-    .error-input {
-      width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--red);
-      font-family: monospace;
-      font-size: 0.83rem;
-      line-height: 1.7;
-      padding: 12px 14px;
-      resize: vertical;
-      min-height: 120px;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    .error-input:focus { border-color: var(--red); }
-
-    .debug-result {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 18px;
-      margin-top: 14px;
-      display: none;
-    }
-    .debug-result.show { display: block; animation: fadeIn 0.3s ease; }
-    .debug-section { margin-bottom: 18px; }
-    .debug-section:last-child { margin-bottom: 0; }
-    .debug-section-title {
-      font-size: 0.78rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .ds-red { color: var(--red); }
-    .ds-yellow { color: var(--yellow); }
-    .ds-green { color: var(--green); }
-    .ds-blue { color: var(--accent); }
-
-    .bug-item {
-      background: var(--surface2);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 8px;
-      border-left: 3px solid var(--red);
-      font-size: 0.83rem;
-    }
-    .bug-line { color: var(--muted); font-size: 0.75rem; margin-bottom: 4px; }
-    .bug-msg { line-height: 1.5; }
-    .fix-item {
-      background: rgba(63,185,80,0.07);
-      border: 1px solid rgba(63,185,80,0.2);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 8px;
-      font-size: 0.83rem;
-      line-height: 1.6;
-    }
-    .fix-code {
-      background: var(--surface2);
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-family: monospace;
-      font-size: 0.8rem;
-      color: var(--green);
-      margin-top: 8px;
-      white-space: pre-wrap;
-    }
-
-    /* ─── LEARN (Dashboard) ─── */
-    .roadmap-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
-    }
-    .roadmap-card {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px;
-      cursor: pointer;
-      transition: all 0.15s;
-      position: relative;
-      overflow: hidden;
-    }
-    .roadmap-card:hover { border-color: var(--accent); transform: translateY(-1px); }
-    .roadmap-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-    }
-    .rm-js::before { background: #f7df1e; }
-    .rm-py::before { background: #3572A5; }
-    .rm-react::before { background: #61dafb; }
-    .rm-node::before { background: #3fb950; }
-    .rm-sql::before { background: #f0883e; }
-    .rm-git::before { background: #f85149; }
-
-    .rm-icon { font-size: 1.8rem; margin-bottom: 8px; }
-    .rm-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
-    .rm-sub { font-size: 0.75rem; color: var(--muted); margin-bottom: 12px; }
-    .rm-bar { background: var(--surface2); height: 5px; border-radius: 4px; overflow: hidden; margin-bottom: 6px; }
-    .rm-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
-    .rm-pct { font-size: 0.72rem; color: var(--muted); }
-
-    .activity-list { display: flex; flex-direction: column; gap: 10px; }
-    .activity-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 12px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.85rem;
-    }
-    .activity-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .activity-text { flex: 1; }
-    .activity-time { font-size: 0.75rem; color: var(--muted); }
-
-    .streak-row {
-      display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px;
-    }
-    .streak-day {
-      width: 28px; height: 28px;
-      border-radius: 5px;
-      background: var(--surface2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.65rem;
-      color: var(--muted);
-      font-weight: 600;
-    }
-    .streak-day.done { background: rgba(63,185,80,0.25); color: var(--green); }
-    .streak-day.today { background: rgba(88,166,255,0.25); color: var(--accent); border: 1px solid var(--accent); }
-
-    /* ─── CHAT TUTOR ─── */
-    .chat-window {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      height: 400px;
-      overflow-y: auto;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      scroll-behavior: smooth;
-    }
-    .chat-msg {
-      display: flex;
-      gap: 10px;
-      animation: fadeIn 0.25s ease;
-    }
-    .chat-avatar {
-      width: 30px; height: 30px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.8rem;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-    .avatar-ai { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #000; font-weight: 700; }
-    .avatar-user { background: var(--surface2); border: 1px solid var(--border); }
-    .chat-bubble {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px 14px;
-      font-size: 0.875rem;
-      line-height: 1.6;
-      max-width: calc(100% - 42px);
-    }
-    .chat-msg.user .chat-bubble { background: rgba(88,166,255,0.1); border-color: rgba(88,166,255,0.3); margin-left: auto; }
-    .chat-msg.user { flex-direction: row-reverse; }
-    .chat-bubble code {
-      background: var(--bg);
-      border-radius: 4px;
-      padding: 1px 6px;
-      font-family: monospace;
-      font-size: 0.8rem;
-      color: var(--orange);
-    }
-    .chat-input-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .chat-input {
-      flex: 1;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      padding: 10px 14px;
-      font-size: 0.875rem;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    .chat-input:focus { border-color: var(--accent); }
-    .chat-input::placeholder { color: var(--muted); }
-
-    .suggest-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-    .chip {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.78rem;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .chip:hover { border-color: var(--accent); color: var(--accent); }
-
-    /* ─── TYPING INDICATOR ─── */
-    .typing-indicator {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-      padding: 8px 4px;
-    }
-    .typing-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--muted);
-      animation: bounce 1.2s infinite;
-    }
-    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes bounce {
-      0%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-6px); }
-    }
-
-    /* ─── SCROLLBAR ─── */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
-
-    /* ─── HERO BANNER ─── */
-    .hero-banner {
-      background: linear-gradient(135deg, rgba(88,166,255,0.08) 0%, rgba(188,140,255,0.08) 100%);
-      border: 1px solid rgba(88,166,255,0.2);
-      border-radius: 12px;
-      padding: 22px 24px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-    .hero-text h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; }
-    .hero-text p { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
-    .hero-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
-    .hero-icon { font-size: 2.5rem; flex-shrink: 0; }
-
-    /* Responsive */
-    @media (max-width: 900px) {
-      .sidebar { display: none; }
-      .nav-tabs { gap: 0; }
-      .nav-tab { padding: 6px 10px; font-size: 0.82rem; }
-    }
+    /* COPY BTN */
+    .copy-btn { background:var(--surface2); border:1px solid var(--border); color:var(--muted); padding:3px 10px; border-radius:5px; cursor:pointer; font-size:0.73rem; float:right; margin-top:-2px; transition:all .15s; }
+    .copy-btn:hover { border-color:var(--accent); color:var(--accent); }
   </style>
 </head>
 <body>
+
+<!-- API KEY MODAL -->
+<div class="modal-overlay" id="apiModal">
+  <div class="modal">
+    <h3>🔑 Enter Your Gemini API Key</h3>
+    <p>DevMind uses Google Gemini AI to power all features. Your key is stored only in your browser (localStorage) and never sent anywhere except Google's API.</p>
+    <input type="password" id="apiKeyInput" placeholder="Paste your Gemini API key here..." />
+    <div class="modal-btns">
+      <button class="btn btn-primary" onclick="saveApiKey()">✅ Save & Activate AI</button>
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+    </div>
+    <div class="modal-note">
+      Get a free key at <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a> — free tier includes 15 req/min, no credit card needed.
+    </div>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav>
@@ -830,358 +257,243 @@
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showPanel('learn')">📊 Dashboard</button>
-    <button class="nav-tab" onclick="showPanel('explainer')">🔍 Explain Code</button>
-    <button class="nav-tab" onclick="showPanel('quiz')">⚡ Quiz Me</button>
+    <button class="nav-tab" onclick="showPanel('explainer')">🔍 Explain</button>
+    <button class="nav-tab" onclick="showPanel('quiz')">⚡ Quiz</button>
     <button class="nav-tab" onclick="showPanel('debug')">🐛 Debug</button>
     <button class="nav-tab" onclick="showPanel('tutor')">💬 AI Tutor</button>
   </div>
+  <button class="api-key-btn" onclick="openModal()" id="apiStatusBtn">
+    <div class="api-dot" id="apiDot"></div>
+    <span id="apiStatusText">Set API Key</span>
+  </button>
 </nav>
 
 <!-- APP -->
 <div class="app">
-
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="xp-card">
       <h4>Your Progress</h4>
-      <div class="xp-level">Level 7</div>
+      <div class="xp-level">Level <span id="levelNum">7</span></div>
       <div class="xp-label">Code Apprentice</div>
-      <div class="xp-bar"><div class="xp-fill" style="width: 62%"></div></div>
-      <div class="xp-sub">1,240 / 2,000 XP to Level 8</div>
+      <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:62%"></div></div>
+      <div class="xp-sub" id="xpSub">1,240 / 2,000 XP</div>
     </div>
     <div class="stats-grid">
-      <div class="stat-box"><div class="stat-num" style="color:var(--accent)">47</div><div class="stat-lbl">Quizzes Taken</div></div>
-      <div class="stat-box"><div class="stat-num" style="color:var(--green)">89%</div><div class="stat-lbl">Avg Score</div></div>
-      <div class="stat-box"><div class="stat-num" style="color:var(--accent2)">12</div><div class="stat-lbl">Day Streak 🔥</div></div>
-      <div class="stat-box"><div class="stat-num" style="color:var(--orange)">23</div><div class="stat-lbl">Bugs Fixed</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--accent)" id="statQuizzes">47</div><div class="stat-lbl">Quizzes</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--green)" id="statScore">89%</div><div class="stat-lbl">Avg Score</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--accent2)" id="statStreak">12</div><div class="stat-lbl">Day Streak 🔥</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--orange)" id="statBugs">23</div><div class="stat-lbl">Bugs Fixed</div></div>
     </div>
     <div class="topics-card">
       <h4>Topics Studied</h4>
-      <div class="topic-item active">
-        <div class="topic-dot" style="background:#f7df1e"></div>
-        <span class="topic-name">JavaScript</span>
-        <span class="topic-pct">84%</span>
-      </div>
-      <div class="topic-item">
-        <div class="topic-dot" style="background:#3572A5"></div>
-        <span class="topic-name">Python</span>
-        <span class="topic-pct">71%</span>
-      </div>
-      <div class="topic-item">
-        <div class="topic-dot" style="background:#61dafb"></div>
-        <span class="topic-name">React</span>
-        <span class="topic-pct">58%</span>
-      </div>
-      <div class="topic-item">
-        <div class="topic-dot" style="background:#3fb950"></div>
-        <span class="topic-name">Node.js</span>
-        <span class="topic-pct">45%</span>
-      </div>
-      <div class="topic-item">
-        <div class="topic-dot" style="background:#f0883e"></div>
-        <span class="topic-name">SQL</span>
-        <span class="topic-pct">33%</span>
-      </div>
+      <div class="topic-item"><div class="topic-dot" style="background:#f7df1e"></div><span class="topic-name">JavaScript</span><span class="topic-pct">84%</span></div>
+      <div class="topic-item"><div class="topic-dot" style="background:#3572A5"></div><span class="topic-name">Python</span><span class="topic-pct">71%</span></div>
+      <div class="topic-item"><div class="topic-dot" style="background:#61dafb"></div><span class="topic-name">React</span><span class="topic-pct">58%</span></div>
+      <div class="topic-item"><div class="topic-dot" style="background:#3fb950"></div><span class="topic-name">Node.js</span><span class="topic-pct">45%</span></div>
+      <div class="topic-item"><div class="topic-dot" style="background:#f0883e"></div><span class="topic-name">SQL</span><span class="topic-pct">33%</span></div>
     </div>
   </aside>
 
   <!-- MAIN -->
   <main class="main">
 
-    <!-- ─── LEARN / DASHBOARD PANEL ─── -->
+    <!-- DASHBOARD -->
     <div class="panel active" id="panel-learn">
       <div class="hero-banner">
         <div class="hero-icon">🚀</div>
         <div class="hero-text">
-          <h2>Welcome back, Developer! 🔥 12-day streak</h2>
+          <h2>Welcome back! 🔥 12-day streak</h2>
           <p>You've mastered 3 new concepts this week. Keep going — you're in the top 8% of learners.</p>
           <div class="hero-actions">
             <button class="btn btn-primary" onclick="showPanel('quiz')">⚡ Quick Quiz</button>
             <button class="btn btn-secondary" onclick="showPanel('explainer')">🔍 Explain Code</button>
             <button class="btn btn-secondary" onclick="showPanel('tutor')">💬 Ask AI Tutor</button>
+            <button class="btn btn-secondary" onclick="showPanel('debug')">🐛 Debug Code</button>
           </div>
         </div>
       </div>
-
       <div class="card">
         <div class="card-title">📅 Learning Streak</div>
         <div class="card-sub">Your activity over the last 3 weeks</div>
         <div class="streak-row" id="streakRow"></div>
       </div>
-
       <div class="card">
         <div class="card-title">🗺️ Learning Roadmaps</div>
-        <div class="card-sub">Track your progress across technologies</div>
+        <div class="card-sub">Click any roadmap to start a quiz on that topic</div>
         <div class="roadmap-grid">
-          <div class="roadmap-card rm-js">
-            <div class="rm-icon">📜</div>
-            <div class="rm-title">JavaScript</div>
-            <div class="rm-sub">18/22 topics</div>
-            <div class="rm-bar"><div class="rm-fill" style="width:82%;background:#f7df1e"></div></div>
-            <div class="rm-pct">82% complete</div>
-          </div>
-          <div class="roadmap-card rm-py">
-            <div class="rm-icon">🐍</div>
-            <div class="rm-title">Python</div>
-            <div class="rm-sub">15/21 topics</div>
-            <div class="rm-bar"><div class="rm-fill" style="width:71%;background:#3572A5"></div></div>
-            <div class="rm-pct">71% complete</div>
-          </div>
-          <div class="roadmap-card rm-react">
-            <div class="rm-icon">⚛️</div>
-            <div class="rm-title">React</div>
-            <div class="rm-sub">11/19 topics</div>
-            <div class="rm-bar"><div class="rm-fill" style="width:58%;background:#61dafb"></div></div>
-            <div class="rm-pct">58% complete</div>
-          </div>
-          <div class="roadmap-card rm-node">
-            <div class="rm-icon">🟢</div>
-            <div class="rm-title">Node.js</div>
-            <div class="rm-sub">8/18 topics</div>
-            <div class="rm-bar"><div class="rm-fill" style="width:44%;background:#3fb950"></div></div>
-            <div class="rm-pct">44% complete</div>
-          </div>
-          <div class="roadmap-card rm-sql">
-            <div class="rm-icon">🗄️</div>
-            <div class="rm-title">SQL</div>
-            <div class="rm-sub">6/18 topics</div>
-            <div class="rm-bar"><div class="rm-fill" style="width:33%;background:#f0883e"></div></div>
-            <div class="rm-pct">33% complete</div>
-          </div>
-          <div class="roadmap-card rm-git">
-            <div class="rm-icon">🔀</div>
-            <div class="rm-title">Git & DevOps</div>
-            <div class="rm-sub">4/14 topics</div>
-            <div class="rm-bar"><div class="rm-fill" style="width:28%;background:#f85149"></div></div>
-            <div class="rm-pct">28% complete</div>
-          </div>
+          <div class="roadmap-card rm-js" onclick="startRoadmapQuiz('javascript')"><div class="rm-icon">📜</div><div class="rm-title">JavaScript</div><div class="rm-sub">18/22 topics</div><div class="rm-bar"><div class="rm-fill" style="width:82%;background:#f7df1e"></div></div><div class="rm-pct">82% complete</div></div>
+          <div class="roadmap-card rm-py" onclick="startRoadmapQuiz('python')"><div class="rm-icon">🐍</div><div class="rm-title">Python</div><div class="rm-sub">15/21 topics</div><div class="rm-bar"><div class="rm-fill" style="width:71%;background:#3572A5"></div></div><div class="rm-pct">71% complete</div></div>
+          <div class="roadmap-card rm-react" onclick="startRoadmapQuiz('react')"><div class="rm-icon">⚛️</div><div class="rm-title">React</div><div class="rm-sub">11/19 topics</div><div class="rm-bar"><div class="rm-fill" style="width:58%;background:#61dafb"></div></div><div class="rm-pct">58% complete</div></div>
+          <div class="roadmap-card rm-node" onclick="startRoadmapQuiz('nodejs')"><div class="rm-icon">🟢</div><div class="rm-title">Node.js</div><div class="rm-sub">8/18 topics</div><div class="rm-bar"><div class="rm-fill" style="width:44%;background:#3fb950"></div></div><div class="rm-pct">44% complete</div></div>
+          <div class="roadmap-card rm-sql" onclick="startRoadmapQuiz('sql')"><div class="rm-icon">🗄️</div><div class="rm-title">SQL</div><div class="rm-sub">6/18 topics</div><div class="rm-bar"><div class="rm-fill" style="width:33%;background:#f0883e"></div></div><div class="rm-pct">33% complete</div></div>
+          <div class="roadmap-card rm-git" onclick="startRoadmapQuiz('git')"><div class="rm-icon">🔀</div><div class="rm-title">Git & DevOps</div><div class="rm-sub">4/14 topics</div><div class="rm-bar"><div class="rm-fill" style="width:28%;background:#f85149"></div></div><div class="rm-pct">28% complete</div></div>
         </div>
       </div>
-
       <div class="card">
         <div class="card-title">⚡ Recent Activity</div>
-        <div class="card-sub">Your last 5 learning sessions</div>
         <div class="activity-list">
-          <div class="activity-item">
-            <div class="activity-dot" style="background:var(--green)"></div>
-            <div class="activity-text">Completed <strong>JavaScript Closures</strong> quiz — 10/10 ✨</div>
-            <div class="activity-time">2h ago</div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-dot" style="background:var(--accent)"></div>
-            <div class="activity-text">Explained <strong>async/await pattern</strong> with AI tutor</div>
-            <div class="activity-time">4h ago</div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-dot" style="background:var(--orange)"></div>
-            <div class="activity-text">Fixed <strong>TypeError: cannot read property of undefined</strong></div>
-            <div class="activity-time">Yesterday</div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-dot" style="background:var(--accent2)"></div>
-            <div class="activity-text">Completed <strong>React Hooks</strong> quiz — 8/10</div>
-            <div class="activity-time">2 days ago</div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-dot" style="background:var(--yellow)"></div>
-            <div class="activity-text">Started <strong>Python Decorators</strong> learning module</div>
-            <div class="activity-time">3 days ago</div>
-          </div>
+          <div class="activity-item"><div class="activity-dot" style="background:var(--green)"></div><div style="flex:1">Completed <strong>JavaScript Closures</strong> quiz — 10/10 ✨</div><div class="activity-time">2h ago</div></div>
+          <div class="activity-item"><div class="activity-dot" style="background:var(--accent)"></div><div style="flex:1">Asked AI Tutor about <strong>async/await</strong></div><div class="activity-time">4h ago</div></div>
+          <div class="activity-item"><div class="activity-dot" style="background:var(--orange)"></div><div style="flex:1">Fixed <strong>TypeError: cannot read property of undefined</strong></div><div class="activity-time">Yesterday</div></div>
+          <div class="activity-item"><div class="activity-dot" style="background:var(--accent2)"></div><div style="flex:1">Explained <strong>React useEffect hook</strong> code</div><div class="activity-time">2 days ago</div></div>
+          <div class="activity-item"><div class="activity-dot" style="background:var(--yellow)"></div><div style="flex:1">Started <strong>Python Decorators</strong> learning module</div><div class="activity-time">3 days ago</div></div>
         </div>
       </div>
     </div>
 
-    <!-- ─── CODE EXPLAINER PANEL ─── -->
+    <!-- CODE EXPLAINER -->
     <div class="panel" id="panel-explainer">
       <div class="card">
         <div class="card-title">🔍 AI Code Explainer</div>
-        <div class="card-sub">Paste any code — get a plain-English, step-by-step breakdown instantly.</div>
-
+        <div class="card-sub">Paste any code — get a detailed, step-by-step plain-English explanation powered by Gemini AI.</div>
         <div class="lang-select-row">
-          <button class="lang-btn active" onclick="selectLang(this,'javascript')">JavaScript</button>
-          <button class="lang-btn" onclick="selectLang(this,'python')">Python</button>
-          <button class="lang-btn" onclick="selectLang(this,'java')">Java</button>
-          <button class="lang-btn" onclick="selectLang(this,'cpp')">C++</button>
-          <button class="lang-btn" onclick="selectLang(this,'typescript')">TypeScript</button>
-          <button class="lang-btn" onclick="selectLang(this,'sql')">SQL</button>
+          <button class="lang-btn active" onclick="selectLang(this,'JavaScript')">JavaScript</button>
+          <button class="lang-btn" onclick="selectLang(this,'Python')">Python</button>
+          <button class="lang-btn" onclick="selectLang(this,'Java')">Java</button>
+          <button class="lang-btn" onclick="selectLang(this,'C++')">C++</button>
+          <button class="lang-btn" onclick="selectLang(this,'TypeScript')">TypeScript</button>
+          <button class="lang-btn" onclick="selectLang(this,'SQL')">SQL</button>
+          <button class="lang-btn" onclick="selectLang(this,'Rust')">Rust</button>
+          <button class="lang-btn" onclick="selectLang(this,'Go')">Go</button>
         </div>
-
-        <div class="code-input-wrap">
-          <textarea class="code-input" id="codeInput" placeholder="// Paste your code here...
-function debounce(func, delay) {
-  let timer;
-  return function(...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => func.apply(this, args), delay);
-  };
-}"></textarea>
-        </div>
-
+        <textarea class="code-input" id="codeInput" placeholder="// Paste your code here..."></textarea>
         <div class="btn-row">
-          <button class="btn btn-primary" onclick="explainCode()" id="explainBtn">
-            <span>🧠 Explain This Code</span>
-          </button>
+          <button class="btn btn-primary" onclick="explainCode()" id="explainBtn">🧠 Explain This Code</button>
           <button class="btn btn-secondary" onclick="loadSample()">📋 Load Sample</button>
-          <button class="btn btn-secondary" onclick="clearExplainer()">🗑️ Clear</button>
+          <button class="btn btn-secondary" onclick="simplifyCode()">✨ Simplify Explanation</button>
+          <button class="btn btn-secondary" onclick="document.getElementById('codeInput').value='';document.getElementById('explainOutput').classList.remove('show')">🗑️ Clear</button>
         </div>
-
-        <div class="explanation-box" id="explanationBox">
-          <h3>📖 Step-by-Step Explanation</h3>
-          <ul class="step-list" id="stepList"></ul>
-          <div class="concept-tags" id="conceptTags"></div>
-          <div class="complexity-row">
-            <span class="complexity-label">Complexity:</span>
-            <span class="complexity-badge" id="complexityBadge"></span>
-          </div>
+        <div class="ai-output show" id="explainOutput" style="display:none">
+          <h3>📖 AI Explanation <button class="copy-btn" onclick="copyOutput('explainContent')">Copy</button></h3>
+          <div class="md-content" id="explainContent"></div>
         </div>
       </div>
     </div>
 
-    <!-- ─── QUIZ PANEL ─── -->
+    <!-- QUIZ -->
     <div class="panel" id="panel-quiz">
       <div class="card">
-        <div class="card-title">⚡ Adaptive Quiz Engine</div>
-        <div class="card-sub">AI-generated questions that adapt to your skill level.</div>
-
-        <!-- Setup -->
+        <div class="card-title">⚡ AI Quiz Engine</div>
+        <div class="card-sub">AI generates fresh, unique questions every time based on your chosen topic and difficulty.</div>
         <div class="quiz-setup" id="quizSetup">
           <div>
-            <div style="font-size:0.82rem;color:var(--muted);margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Choose Topic</div>
+            <div style="font-size:0.78rem;color:var(--muted);margin-bottom:9px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Choose Topic</div>
             <div class="topic-grid">
-              <div class="topic-card selected" onclick="selectTopic(this,'javascript')"><div class="t-icon">📜</div><div class="t-name">JavaScript</div></div>
-              <div class="topic-card" onclick="selectTopic(this,'python')"><div class="t-icon">🐍</div><div class="t-name">Python</div></div>
-              <div class="topic-card" onclick="selectTopic(this,'react')"><div class="t-icon">⚛️</div><div class="t-name">React</div></div>
-              <div class="topic-card" onclick="selectTopic(this,'nodejs')"><div class="t-icon">🟢</div><div class="t-name">Node.js</div></div>
-              <div class="topic-card" onclick="selectTopic(this,'sql')"><div class="t-icon">🗄️</div><div class="t-name">SQL</div></div>
-              <div class="topic-card" onclick="selectTopic(this,'git')"><div class="t-icon">🔀</div><div class="t-name">Git</div></div>
+              <div class="topic-card selected" onclick="selectTopic(this,'JavaScript')"><div class="t-icon">📜</div><div class="t-name">JavaScript</div></div>
+              <div class="topic-card" onclick="selectTopic(this,'Python')"><div class="t-icon">🐍</div><div class="t-name">Python</div></div>
+              <div class="topic-card" onclick="selectTopic(this,'React')"><div class="t-icon">⚛️</div><div class="t-name">React</div></div>
+              <div class="topic-card" onclick="selectTopic(this,'Node.js')"><div class="t-icon">🟢</div><div class="t-name">Node.js</div></div>
+              <div class="topic-card" onclick="selectTopic(this,'SQL')"><div class="t-icon">🗄️</div><div class="t-name">SQL</div></div>
+              <div class="topic-card" onclick="selectTopic(this,'Git')"><div class="t-icon">🔀</div><div class="t-name">Git</div></div>
+              <div class="topic-card" onclick="selectTopic(this,'TypeScript')"><div class="t-icon">📘</div><div class="t-name">TypeScript</div></div>
+              <div class="topic-card" onclick="selectTopic(this,'Data Structures')"><div class="t-icon">🌲</div><div class="t-name">DSA</div></div>
+              <div class="topic-card" onclick="selectTopic(this,'System Design')"><div class="t-icon">🏗️</div><div class="t-name">System Design</div></div>
             </div>
           </div>
           <div>
-            <div style="font-size:0.82rem;color:var(--muted);margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Difficulty</div>
+            <div style="font-size:0.78rem;color:var(--muted);margin-bottom:9px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Difficulty</div>
             <div class="diff-row">
-              <div class="diff-btn" onclick="selectDiff(this,'beginner')">🌱 Beginner</div>
-              <div class="diff-btn selected" onclick="selectDiff(this,'intermediate')">⚡ Intermediate</div>
-              <div class="diff-btn" onclick="selectDiff(this,'advanced')">🔥 Advanced</div>
+              <div class="diff-btn" onclick="selectDiff(this,'Beginner')">🌱 Beginner</div>
+              <div class="diff-btn selected" onclick="selectDiff(this,'Intermediate')">⚡ Intermediate</div>
+              <div class="diff-btn" onclick="selectDiff(this,'Advanced')">🔥 Advanced</div>
             </div>
           </div>
-          <button class="btn btn-primary" onclick="startQuiz()" style="align-self:flex-start;padding:10px 24px;">
-            🚀 Start Quiz
-          </button>
+          <div style="display:flex;gap:9px;align-items:center">
+            <button class="btn btn-primary" onclick="startQuiz()" id="startQuizBtn" style="padding:10px 22px">🚀 Generate AI Quiz</button>
+            <span style="font-size:0.78rem;color:var(--muted)">AI generates 5 fresh questions each time</span>
+          </div>
         </div>
-
-        <!-- Active Quiz -->
+        <!-- Active quiz -->
         <div class="quiz-active" id="quizActive">
-          <div class="quiz-meta">
-            <span id="qMeta">Question 1 of 5</span>
-            <span id="qScore">Score: 0</span>
-          </div>
-          <div class="quiz-progress-bar">
-            <div class="quiz-progress-fill" id="quizProgressFill" style="width:0%"></div>
-          </div>
-          <div class="question-card" id="questionCard"></div>
+          <div class="quiz-meta"><span id="qMeta">Question 1 of 5</span><span id="qScore">Score: 0</span></div>
+          <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgressFill" style="width:0%"></div></div>
+          <div class="question-card" id="questionCard"><div style="text-align:center;padding:30px;color:var(--muted)">Loading AI question...</div></div>
           <div class="explanation-reveal" id="explanationReveal"></div>
           <div class="btn-row">
-            <button class="btn btn-secondary" onclick="nextQuestion()" id="nextBtn" style="display:none">
-              Next Question →
-            </button>
+            <button class="btn btn-secondary" id="nextBtn" onclick="nextQuestion()" style="display:none">Next Question →</button>
+            <button class="btn btn-secondary" onclick="resetQuiz()">↩ Back to Setup</button>
           </div>
         </div>
-
         <!-- Results -->
         <div class="quiz-results" id="quizResults">
           <div class="results-header">
             <div class="results-score" id="resultsScore">0/5</div>
-            <div class="results-label" id="resultsLabel">Loading results...</div>
+            <div class="results-label" id="resultsLabel" style="color:var(--muted);font-size:.9rem;margin-top:4px"></div>
           </div>
           <div class="results-breakdown">
-            <div class="breakdown-item">
-              <div class="breakdown-num" id="resCorrect" style="color:var(--green)">0</div>
-              <div class="breakdown-lbl">Correct</div>
-            </div>
-            <div class="breakdown-item">
-              <div class="breakdown-num" id="resWrong" style="color:var(--red)">0</div>
-              <div class="breakdown-lbl">Wrong</div>
-            </div>
-            <div class="breakdown-item">
-              <div class="breakdown-num" id="resXP" style="color:var(--accent)">+0</div>
-              <div class="breakdown-lbl">XP Earned</div>
-            </div>
+            <div class="breakdown-item"><div class="breakdown-num" id="resCorrect" style="color:var(--green)">0</div><div class="breakdown-lbl">Correct</div></div>
+            <div class="breakdown-item"><div class="breakdown-num" id="resWrong" style="color:var(--red)">0</div><div class="breakdown-lbl">Wrong</div></div>
+            <div class="breakdown-item"><div class="breakdown-num" id="resXP" style="color:var(--accent)">+0</div><div class="breakdown-lbl">XP Earned</div></div>
           </div>
-          <button class="btn btn-primary" onclick="resetQuiz()" style="align-self:flex-start">🔄 Try Again</button>
+          <button class="btn btn-primary" onclick="resetQuiz()" style="align-self:flex-start">🔄 New Quiz</button>
         </div>
       </div>
     </div>
 
-    <!-- ─── DEBUG PANEL ─── -->
+    <!-- DEBUGGER -->
     <div class="panel" id="panel-debug">
       <div class="card">
         <div class="card-title">🐛 AI Debugger</div>
-        <div class="card-sub">Paste your buggy code and error — get an instant diagnosis and fix.</div>
-
+        <div class="card-sub">Paste your buggy code and error message — Gemini AI gives you root cause analysis, exact fixes, and prevention tips.</div>
         <div class="two-col">
           <div>
-            <div style="font-size:0.8rem;color:var(--muted);margin-bottom:8px;font-weight:600;">Your Code</div>
-            <textarea class="code-input" id="debugCode" style="min-height:200px" placeholder="// Paste your buggy code here...
-async function fetchUser(id) {
-  const response = await fetch('/api/user/' + id)
-  const data = response.json()  
-  return data.user.name
-}"></textarea>
+            <div style="font-size:0.79rem;color:var(--muted);margin-bottom:7px;font-weight:600">Your Code</div>
+            <textarea class="code-input" id="debugCode" style="min-height:200px" placeholder="// Paste your buggy code here..."></textarea>
           </div>
           <div>
-            <div style="font-size:0.8rem;color:var(--muted);margin-bottom:8px;font-weight:600;">Error Message (optional)</div>
-            <textarea class="error-input" id="debugError" placeholder="TypeError: Cannot read properties of undefined (reading 'name')
-  at fetchUser (app.js:4)
-  at async main (app.js:10)"></textarea>
-            <div style="font-size:0.8rem;color:var(--muted);margin-top:8px;">Language</div>
-            <div class="lang-select-row" style="margin-top:8px">
-              <button class="lang-btn active" onclick="selectDebugLang(this,'javascript')">JS</button>
-              <button class="lang-btn" onclick="selectDebugLang(this,'python')">Python</button>
-              <button class="lang-btn" onclick="selectDebugLang(this,'typescript')">TS</button>
-              <button class="lang-btn" onclick="selectDebugLang(this,'java')">Java</button>
+            <div style="font-size:0.79rem;color:var(--muted);margin-bottom:7px;font-weight:600">Error Message (optional)</div>
+            <textarea class="error-input" id="debugError" placeholder="Paste the error/stack trace here..."></textarea>
+            <div style="font-size:0.79rem;color:var(--muted);margin-top:10px;margin-bottom:7px;font-weight:600">Language</div>
+            <div class="lang-select-row" style="margin-bottom:0">
+              <button class="lang-btn active" onclick="selectDebugLang(this,'JavaScript')">JS</button>
+              <button class="lang-btn" onclick="selectDebugLang(this,'Python')">Python</button>
+              <button class="lang-btn" onclick="selectDebugLang(this,'TypeScript')">TS</button>
+              <button class="lang-btn" onclick="selectDebugLang(this,'Java')">Java</button>
+              <button class="lang-btn" onclick="selectDebugLang(this,'C++')">C++</button>
             </div>
           </div>
         </div>
-
         <div class="btn-row">
-          <button class="btn btn-red" onclick="analyzeDebug()" id="debugBtn" style="background:var(--red);color:#fff;">
-            🐛 Analyze & Fix
-          </button>
+          <button class="btn btn-red" onclick="analyzeDebug()" id="debugBtn">🐛 Analyze & Fix</button>
           <button class="btn btn-secondary" onclick="loadDebugSample()">📋 Load Sample Bug</button>
+          <button class="btn btn-secondary" onclick="document.getElementById('debugCode').value='';document.getElementById('debugError').value='';document.getElementById('debugOutput').classList.remove('show')">🗑️ Clear</button>
         </div>
-
-        <div class="debug-result" id="debugResult"></div>
+        <div class="ai-output" id="debugOutput">
+          <h3>🔍 Debug Analysis <button class="copy-btn" onclick="copyOutput('debugContent')">Copy</button></h3>
+          <div class="md-content" id="debugContent"></div>
+        </div>
       </div>
     </div>
 
-    <!-- ─── AI TUTOR PANEL ─── -->
+    <!-- AI TUTOR -->
     <div class="panel" id="panel-tutor">
       <div class="card">
-        <div class="card-title">💬 AI Tutor — DevMind Assistant</div>
-        <div class="card-sub">Ask anything about programming, concepts, architecture, or career advice. I adapt to your level.</div>
-
-        <div class="suggest-chips" id="suggestChips">
+        <div class="card-title">💬 AI Tutor — Powered by Gemini</div>
+        <div class="card-sub">Ask anything — programming concepts, career advice, code reviews, architecture questions. Full AI answers, not pre-written responses.</div>
+        <div class="suggest-chips">
           <span class="chip" onclick="sendChip(this)">What is a closure in JavaScript?</span>
-          <span class="chip" onclick="sendChip(this)">Explain async/await vs Promises</span>
-          <span class="chip" onclick="sendChip(this)">How does React reconciliation work?</span>
-          <span class="chip" onclick="sendChip(this)">What's the difference between == and ===?</span>
-          <span class="chip" onclick="sendChip(this)">Explain Big O notation simply</span>
-          <span class="chip" onclick="sendChip(this)">What is a REST API?</span>
+          <span class="chip" onclick="sendChip(this)">Explain async/await vs Promises with examples</span>
+          <span class="chip" onclick="sendChip(this)">How does React's virtual DOM work?</span>
+          <span class="chip" onclick="sendChip(this)">What is Big O notation? Give examples</span>
+          <span class="chip" onclick="sendChip(this)">Explain REST vs GraphQL</span>
+          <span class="chip" onclick="sendChip(this)">What are Python decorators?</span>
+          <span class="chip" onclick="sendChip(this)">How do I prepare for a coding interview?</span>
+          <span class="chip" onclick="sendChip(this)">Explain microservices architecture</span>
         </div>
-
         <div class="chat-window" id="chatWindow">
           <div class="chat-msg ai">
             <div class="chat-avatar avatar-ai">AI</div>
             <div class="chat-bubble">
-              👋 Hi! I'm your DevMind AI Tutor. I can explain any programming concept, review your code, answer career questions, or guide you through complex architectures.<br><br>
-              What would you like to learn today? Try one of the suggestions above, or ask me anything!
+              👋 Hi! I'm your DevMind AI Tutor powered by Google Gemini.<br><br>
+              I can explain <strong>any programming concept</strong>, review your code, answer architecture questions, help with debugging logic, or guide your learning path.<br><br>
+              <strong>Set your Gemini API key</strong> (top right) to unlock full AI — then ask me anything! 🚀
             </div>
           </div>
         </div>
-
         <div class="chat-input-row">
-          <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything about programming..." onkeydown="if(event.key==='Enter')sendChat()" />
-          <button class="btn btn-primary" onclick="sendChat()">Send →</button>
+          <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything about programming..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}" />
+          <button class="btn btn-primary" onclick="sendChat()" id="sendBtn">Send →</button>
         </div>
       </div>
     </div>
@@ -1190,438 +502,397 @@ async function fetchUser(id) {
 </div>
 
 <script>
-// ─── PANEL NAVIGATION ───────────────────────────────────────────────
-function showPanel(name) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('panel-' + name).classList.add('active');
-  const tabs = document.querySelectorAll('.nav-tab');
-  const map = { learn: 0, explainer: 1, quiz: 2, debug: 3, tutor: 4 };
-  tabs[map[name]].classList.add('active');
+// ══════════════════════════════════════════════════════
+// API KEY MANAGEMENT
+// ══════════════════════════════════════════════════════
+let GEMINI_API_KEY = localStorage.getItem('devmind_api_key') || '';
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+
+function updateApiStatus() {
+  const dot = document.getElementById('apiDot');
+  const txt = document.getElementById('apiStatusText');
+  if (GEMINI_API_KEY) {
+    dot.classList.add('ok');
+    txt.textContent = 'AI Active ✓';
+  } else {
+    dot.classList.remove('ok');
+    txt.textContent = 'Set API Key';
+  }
 }
 
-// ─── STREAK RENDER ───────────────────────────────────────────────────
-function renderStreak() {
+function openModal() { document.getElementById('apiModal').classList.add('show'); document.getElementById('apiKeyInput').value = GEMINI_API_KEY; }
+function closeModal() { document.getElementById('apiModal').classList.remove('show'); }
+
+function saveApiKey() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if (!key) return alert('Please enter a valid API key.');
+  GEMINI_API_KEY = key;
+  localStorage.setItem('devmind_api_key', key);
+  updateApiStatus();
+  closeModal();
+  showToast('✅ AI activated! All features are now live.');
+}
+
+updateApiStatus();
+
+// ══════════════════════════════════════════════════════
+// GEMINI AI CALL
+// ══════════════════════════════════════════════════════
+async function callGemini(prompt) {
+  if (!GEMINI_API_KEY) {
+    openModal();
+    throw new Error('API key required. Please set your Gemini API key.');
+  }
+  const res = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.7, maxOutputTokens: 2048 }
+    })
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err?.error?.message || `API error ${res.status}`);
+  }
+  const data = await res.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response generated.';
+}
+
+// ══════════════════════════════════════════════════════
+// MARKDOWN RENDERER
+// ══════════════════════════════════════════════════════
+function renderMarkdown(text) {
+  return text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    // code blocks
+    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_,lang,code) =>
+      `<pre><code>${code.trim()}</code></pre>`)
+    // inline code
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    // bold
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    // italic
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    // h3
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    // h2
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    // h1
+    .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    // hr
+    .replace(/^---$/gm,'<hr>')
+    // blockquote
+    .replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    // unordered list
+    .replace(/^\s*[-*] (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, match => `<ul>${match}</ul>`)
+    // ordered list
+    .replace(/^\d+\. (.+)$/gm,'<li>$1</li>')
+    // tables (simple)
+    .replace(/\|(.+)\|\n\|[-| :]+\|\n((\|.+\|\n?)*)/g, (match) => {
+      const rows = match.trim().split('\n');
+      const header = rows[0].split('|').filter(Boolean).map(c=>`<th>${c.trim()}</th>`).join('');
+      const body = rows.slice(2).map(r=>
+        '<tr>'+r.split('|').filter(Boolean).map(c=>`<td>${c.trim()}</td>`).join('')+'</tr>'
+      ).join('');
+      return `<table><thead><tr>${header}</tr></thead><tbody>${body}</tbody></table>`;
+    })
+    // line breaks
+    .replace(/\n\n/g,'</p><p>')
+    .replace(/\n/g,'<br>')
+    .replace(/^(.+)$/,'<p>$1</p>');
+}
+
+// ══════════════════════════════════════════════════════
+// PANEL NAVIGATION
+// ══════════════════════════════════════════════════════
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  const map = {learn:0,explainer:1,quiz:2,debug:3,tutor:4};
+  document.querySelectorAll('.nav-tab')[map[name]].classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════
+// STREAK
+// ══════════════════════════════════════════════════════
+(function renderStreak(){
   const row = document.getElementById('streakRow');
   const pattern = [1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,1,0,1,1];
   const days = ['S','M','T','W','T','F','S'];
-  pattern.forEach((done, i) => {
+  pattern.forEach((done,i)=>{
     const d = document.createElement('div');
-    d.className = 'streak-day' + (done ? ' done' : '') + (i === pattern.length - 1 ? ' today' : '');
-    d.textContent = days[i % 7];
+    d.className='streak-day'+(done?' done':'')+(i===pattern.length-1?' today':'');
+    d.textContent=days[i%7];
     row.appendChild(d);
   });
-}
-renderStreak();
+})();
 
-// ─── LANG SELECT ─────────────────────────────────────────────────────
-let currentLang = 'javascript';
-let currentDebugLang = 'javascript';
+// ══════════════════════════════════════════════════════
+// LANG SELECTS
+// ══════════════════════════════════════════════════════
+let currentLang = 'JavaScript';
+let currentDebugLang = 'JavaScript';
 
 function selectLang(btn, lang) {
-  document.querySelectorAll('#panel-explainer .lang-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  currentLang = lang;
+  document.querySelectorAll('#panel-explainer .lang-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); currentLang = lang;
 }
-
 function selectDebugLang(btn, lang) {
-  document.querySelectorAll('#panel-debug .lang-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  currentDebugLang = lang;
+  document.querySelectorAll('#panel-debug .lang-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); currentDebugLang = lang;
 }
 
-// ─── CODE SAMPLES ────────────────────────────────────────────────────
-const samples = {
-  javascript: `function debounce(func, delay) {
+// ══════════════════════════════════════════════════════
+// CODE EXPLAINER
+// ══════════════════════════════════════════════════════
+const CODE_SAMPLES = {
+  JavaScript:`function debounce(func, delay) {
   let timer;
   return function(...args) {
     clearTimeout(timer);
     timer = setTimeout(() => func.apply(this, args), delay);
   };
 }`,
-  python: `def memoize(func):
+  Python:`def memoize(func):
     cache = {}
     def wrapper(*args):
         if args not in cache:
             cache[args] = func(*args)
         return cache[args]
     return wrapper`,
-  java: `public class Singleton {
-    private static Singleton instance;
-    private Singleton() {}
-    public static Singleton getInstance() {
-        if (instance == null) {
-            instance = new Singleton();
-        }
-        return instance;
-    }
-}`,
-  typescript: `type Result<T, E extends Error = Error> =
+  TypeScript:`type Result<T, E extends Error = Error> =
   | { success: true; data: T }
   | { success: false; error: E };
 
-async function tryCatch<T>(
-  fn: () => Promise<T>
-): Promise<Result<T>> {
+async function tryCatch<T>(fn: () => Promise<T>): Promise<Result<T>> {
   try {
     return { success: true, data: await fn() };
   } catch (e) {
     return { success: false, error: e as Error };
   }
 }`,
-  sql: `SELECT 
-  u.name,
-  COUNT(o.id) AS total_orders,
-  SUM(o.amount) AS total_spent
+  SQL:`SELECT u.name, COUNT(o.id) AS total_orders, SUM(o.amount) AS revenue
 FROM users u
 LEFT JOIN orders o ON u.id = o.user_id
 WHERE o.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-GROUP BY u.id
-HAVING total_orders > 2
-ORDER BY total_spent DESC;`,
-  cpp: `template<typename T>
+GROUP BY u.id HAVING total_orders > 2
+ORDER BY revenue DESC;`,
+  Java:`public class Singleton {
+    private static Singleton instance;
+    private Singleton() {}
+    public static synchronized Singleton getInstance() {
+        if (instance == null) instance = new Singleton();
+        return instance;
+    }
+}`,
+  'C++':`template<typename T>
 class Stack {
-private:
     std::vector<T> elements;
 public:
     void push(T const& item) { elements.push_back(item); }
-    void pop() {
-        if (elements.empty()) throw std::out_of_range("Stack is empty");
-        elements.pop_back();
-    }
     T top() const { return elements.back(); }
     bool empty() const { return elements.empty(); }
-};`
+};`,
+  Rust:`fn fibonacci(n: u64) -> u64 {
+    match n {
+        0 => 0,
+        1 => 1,
+        _ => fibonacci(n - 1) + fibonacci(n - 2),
+    }
+}`,
+  Go:`func mergeSort(arr []int) []int {
+    if len(arr) <= 1 { return arr }
+    mid := len(arr) / 2
+    left := mergeSort(arr[:mid])
+    right := mergeSort(arr[mid:])
+    return merge(left, right)
+}`
 };
 
 function loadSample() {
-  document.getElementById('codeInput').value = samples[currentLang] || samples.javascript;
-  document.getElementById('explanationBox').classList.remove('show');
+  document.getElementById('codeInput').value = CODE_SAMPLES[currentLang] || CODE_SAMPLES['JavaScript'];
+  document.getElementById('explainOutput').classList.remove('show');
+  document.getElementById('explainOutput').style.display = 'none';
 }
-
-function clearExplainer() {
-  document.getElementById('codeInput').value = '';
-  document.getElementById('explanationBox').classList.remove('show');
-}
-
-// ─── CODE EXPLANATIONS DATABASE ──────────────────────────────────────
-const explanations = {
-  debounce: {
-    title: 'Debounce Function',
-    steps: [
-      { title: 'Outer function receives parameters', desc: 'The debounce function takes two arguments: func (the function to delay) and delay (milliseconds to wait).', code: 'function debounce(func, delay) {' },
-      { title: 'Private timer variable created', desc: 'A let variable timer is declared in the closure scope — it persists between calls and tracks the pending timeout.', code: 'let timer;' },
-      { title: 'Returns a new function (closure)', desc: 'The function returns a wrapper function. This is a closure — it "closes over" the timer variable, keeping it alive.', code: 'return function(...args) {' },
-      { title: 'Cancel any previous pending call', desc: 'clearTimeout(timer) cancels any previously scheduled call. If the user calls this within the delay window, the old timer is discarded.', code: 'clearTimeout(timer);' },
-      { title: 'Schedule the actual function call', desc: 'A new timer is set. The real func will only execute after delay ms of inactivity. func.apply(this, args) preserves the correct context and arguments.', code: 'timer = setTimeout(() => func.apply(this, args), delay);' },
-      { title: 'Result', desc: 'Classic use case: search bars. Without debounce, every keystroke fires an API call. With debounce, the API is only called 300ms after the user stops typing.' }
-    ],
-    tags: ['Closures', 'Higher-Order Functions', 'setTimeout', 'Performance', 'Event Handling'],
-    complexity: 'medium'
-  },
-  memoize: {
-    title: 'Memoization Decorator (Python)',
-    steps: [
-      { title: 'Decorator function defined', desc: 'memoize is a decorator — a function that wraps another function to add behavior.', code: 'def memoize(func):' },
-      { title: 'Cache dictionary created', desc: 'An empty dict cache is created in the closure scope. It maps argument tuples to computed results.', code: 'cache = {}' },
-      { title: 'Wrapper function checks cache first', desc: 'For every call, the wrapper first checks if args are already in cache. If yes, return cached result immediately — O(1) instead of re-computing.', code: 'if args not in cache:' },
-      { title: 'Compute and store on cache miss', desc: 'Only on a cache miss, the original func is called and its result is stored with the args as key.', code: 'cache[args] = func(*args)' },
-      { title: 'Return cached or computed result', desc: 'Either way, the result is returned. The original func may only ever be called once per unique argument set.', code: 'return cache[args]' },
-      { title: 'Use case', desc: 'Perfect for expensive pure functions like Fibonacci, factorial, or API calls. Without memoize, fib(40) runs millions of operations. With it, each subproblem is computed only once.' }
-    ],
-    tags: ['Decorators', 'Memoization', 'Dynamic Programming', 'Closures', 'Optimization'],
-    complexity: 'medium'
-  },
-  generic: {
-    title: 'Code Analysis',
-    steps: [
-      { title: 'Entry point identified', desc: 'The code defines a reusable construct — either a function, class, or module — that encapsulates specific logic.', code: '' },
-      { title: 'Inputs and parameters analyzed', desc: 'The construct accepts inputs that control its behavior. Parameters are used to make the code reusable across different contexts.', code: '' },
-      { title: 'Core logic execution', desc: 'The main algorithm processes the inputs. Data transformations, computations, or state changes occur here.', code: '' },
-      { title: 'Return value or side effects', desc: 'The construct either returns a value for the caller to use, or produces side effects (mutations, I/O, rendering).', code: '' },
-      { title: 'Usage and best practices', desc: 'This pattern is commonly used in production code. Understanding it helps you write more modular, testable, and maintainable software.' }
-    ],
-    tags: ['Functions', 'Modularity', 'Reusability', 'Best Practices'],
-    complexity: 'easy'
-  }
-};
 
 async function explainCode() {
   const code = document.getElementById('codeInput').value.trim();
-  if (!code) return;
-
+  if (!code) { alert('Please paste some code first.'); return; }
   const btn = document.getElementById('explainBtn');
-  btn.innerHTML = '<div class="spinner"></div><span>Analyzing...</span>';
+  btn.innerHTML = '<div class="spinner"></div> Analyzing...';
   btn.disabled = true;
+  try {
+    const prompt = `You are an expert programming tutor. Analyze this ${currentLang} code and provide:
 
-  // Simulate AI processing time
-  await sleep(1400);
+1. **Overview** — What does this code do in 1-2 sentences?
+2. **Step-by-Step Breakdown** — Explain each part of the code in detail (numbered steps)
+3. **Key Concepts Used** — List and briefly explain the programming concepts/patterns used
+4. **How It Works** — Walk through a concrete example showing input/output
+5. **Common Use Cases** — When and why you'd use this pattern in real projects
+6. **Potential Issues / Improvements** — Any bugs, edge cases, or better approaches
 
-  let expl;
-  if (code.includes('debounce')) expl = explanations.debounce;
-  else if (code.includes('memoize') || code.includes('cache')) expl = explanations.memoize;
-  else expl = buildGenericExplanation(code, currentLang);
+Format using markdown with code blocks where relevant. Be thorough but clear.
 
-  renderExplanation(expl);
-
-  btn.innerHTML = '<span>🧠 Explain This Code</span>';
-  btn.disabled = false;
-  gainXP(50, 'code explained');
-}
-
-function buildGenericExplanation(code, lang) {
-  const lines = code.split('\n').filter(l => l.trim());
-  const langLabels = {
-    javascript: ['function','const','let','var','=>', 'class'],
-    python: ['def ','class ','import ','return '],
-    java: ['public','private','class','void','return'],
-    typescript: ['interface','type','async','const','function'],
-    sql: ['SELECT','FROM','WHERE','JOIN','GROUP'],
-    cpp: ['template','class','void','return','std::']
-  };
-
-  const concepts = [];
-  const lc = code.toLowerCase();
-  if (lc.includes('async') || lc.includes('await') || lc.includes('promise')) concepts.push('Async/Await', 'Promises');
-  if (lc.includes('class')) concepts.push('OOP', 'Classes');
-  if (lc.includes('return function') || lc.includes('def ') && lc.includes('def ')) concepts.push('Higher-Order Functions');
-  if (lc.includes('map') || lc.includes('filter') || lc.includes('reduce')) concepts.push('Functional Programming');
-  if (lc.includes('recursive') || lc.includes('recursion') || code.match(/\w+\s*\(.*\)\s*{[\s\S]*\1/)) concepts.push('Recursion');
-  if (lc.includes('for') || lc.includes('while') || lc.includes('loop')) concepts.push('Iteration');
-  if (lc.includes('select') || lc.includes('join')) concepts.push('SQL Queries', 'Database');
-  if (concepts.length === 0) concepts.push('Functions', 'Logic', lang.charAt(0).toUpperCase() + lang.slice(1));
-
-  const complexity = lines.length > 20 ? 'hard' : lines.length > 8 ? 'medium' : 'easy';
-
-  return {
-    title: `${lang.charAt(0).toUpperCase() + lang.slice(1)} Code Analysis`,
-    steps: [
-      { title: `Structure Overview (${lines.length} lines)`, desc: `This ${lang} snippet contains ${lines.length} lines of code. It appears to define ${code.includes('class') ? 'a class' : 'a function or utility'} that encapsulates reusable logic.`, code: lines[0] || '' },
-      { title: 'Parameter & Input Analysis', desc: 'The code receives inputs that shape its behavior. These inputs are validated or used directly to drive the algorithm.', code: lines[1] || '' },
-      { title: 'Core Logic', desc: 'The main processing happens in the body. Data is transformed, computed, or returned based on the inputs provided.', code: lines[Math.floor(lines.length/2)] || '' },
-      { title: 'Return / Output', desc: 'The result is either returned to the caller or applied as a side effect (e.g., DOM update, file write, API call).', code: lines[lines.length-1] || '' },
-      { title: 'When to Use This Pattern', desc: `This ${lang} pattern is useful for encapsulating reusable behavior, reducing code duplication, and improving maintainability. It follows ${lang === 'python' ? 'Pythonic' : 'idiomatic'} conventions.` }
-    ],
-    tags: concepts,
-    complexity
-  };
-}
-
-function renderExplanation(expl) {
-  const box = document.getElementById('explanationBox');
-  const list = document.getElementById('stepList');
-  const tags = document.getElementById('conceptTags');
-  const badge = document.getElementById('complexityBadge');
-
-  list.innerHTML = expl.steps.map((s, i) => `
-    <li class="step-item">
-      <div class="step-num">${i+1}</div>
-      <div class="step-content">
-        <div class="step-title">${s.title}</div>
-        <div class="step-desc">${s.desc}</div>
-        ${s.code ? `<div class="step-code">${escHtml(s.code)}</div>` : ''}
-      </div>
-    </li>
-  `).join('');
-
-  tags.innerHTML = expl.tags.map(t => `<span class="tag">${t}</span>`).join('');
-
-  const cmap = { easy: ['Beginner-Friendly', 'c-easy'], medium: ['Intermediate', 'c-medium'], hard: ['Advanced', 'c-hard'] };
-  badge.className = 'complexity-badge ' + (cmap[expl.complexity]?.[1] || 'c-easy');
-  badge.textContent = cmap[expl.complexity]?.[0] || 'Beginner';
-
-  box.classList.add('show');
-  box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-// ─── QUIZ ENGINE ─────────────────────────────────────────────────────
-let quizTopic = 'javascript';
-let quizDifficulty = 'intermediate';
-let quizQuestions = [];
-let quizIndex = 0;
-let quizScore = 0;
-let quizAnswered = false;
-
-const questionBank = {
-  javascript: {
-    beginner: [
-      { q: 'Which keyword declares a block-scoped variable in modern JavaScript?', options: ['var', 'let', 'define', 'local'], answer: 1, explanation: '`let` is block-scoped (ES6). `var` is function-scoped and can cause bugs in loops. Always prefer `let` or `const`.' },
-      { q: 'What does `typeof null` return in JavaScript?', options: ['"null"', '"undefined"', '"object"', '"boolean"'], answer: 2, explanation: 'This is a famous JS bug. `typeof null` returns `"object"` — but null is NOT an object. This historical bug was kept for backward compatibility.' },
-      { q: 'What is the output of `console.log(0.1 + 0.2 === 0.3)`?', options: ['true', 'false', 'NaN', 'Error'], answer: 1, explanation: 'JavaScript uses IEEE 754 floating point, which cannot precisely represent 0.1 + 0.2 (= 0.30000000000000004). Use `Math.abs(a - b) < Number.EPSILON` for float comparison.' },
-    ],
-    intermediate: [
-      { q: 'What will this code output?\n\nconst obj = { a: 1 };\nconst copy = Object.assign({}, obj);\ncopy.a = 999;\nconsole.log(obj.a);', options: ['999', '1', 'undefined', 'ReferenceError'], answer: 1, explanation: '`Object.assign` creates a **shallow copy**. Since `a` is a primitive (number), changing `copy.a` does NOT affect `obj.a`. If `a` were an object, they would share the reference.' },
-      { q: 'What does the `...spread` operator do when used in a function call?', options: ['Creates a rest parameter', 'Spreads an iterable into individual arguments', 'Clones an object deeply', 'Concatenates arrays'], answer: 1, explanation: 'The spread operator (`...`) unpacks an iterable (array, string, Set) into individual elements. `Math.max(...[1,2,3])` is equivalent to `Math.max(1, 2, 3)`.' },
-      { q: 'What is a "closure" in JavaScript?', options: ['A function that closes the browser', 'A function with access to its outer scope variables after the outer function returns', 'A way to seal an object', 'A method to close a Promise'], answer: 1, explanation: 'A closure is formed when a function retains access to variables in its outer lexical scope even after that outer function has returned. This powers patterns like debounce, memoize, and module patterns.' },
-      { q: 'Which of these correctly creates a Promise that resolves after 1 second?', options: ['new Promise(resolve => setTimeout(resolve, 1000))', 'Promise.resolve(setTimeout(1000))', 'async () => await 1000', 'new Promise(1000)'], answer: 0, explanation: '`new Promise(resolve => setTimeout(resolve, 1000))` is correct. The executor function receives `resolve` and `reject`. We call `resolve` after 1000ms inside `setTimeout`.' },
-      { q: 'What is the output?\n\nconsole.log(typeof (() => {}))', options: ['"arrow"', '"object"', '"function"', '"undefined"'], answer: 2, explanation: 'Arrow functions are still functions! `typeof` returns `"function"` for any callable, whether declared, expressed, or arrow. The difference is in `this` binding and `arguments` object.' },
-    ],
-    advanced: [
-      { q: 'What is the output of this code?\n\nPromise.resolve(1)\n  .then(x => x + 1)\n  .then(x => { throw new Error("oops") })\n  .catch(e => e.message)\n  .then(msg => console.log(msg))', options: ['Uncaught Error', '"oops"', 'undefined', 'null'], answer: 1, explanation: '`.catch()` handles the thrown error and returns `e.message` which is `"oops"`. The final `.then()` receives `"oops"` and logs it. Promise chains continue after `.catch()` unless it rethrows.' },
-      { q: 'What design pattern does this implement?\n\nconst EventBus = (() => {\n  const subs = {};\n  return {\n    on: (e, fn) => (subs[e] = [...(subs[e]||[]), fn]),\n    emit: (e, d) => (subs[e]||[]).forEach(fn => fn(d))\n  };\n})()', options: ['Singleton + Observer', 'Factory + Iterator', 'Proxy + Decorator', 'Command + Memento'], answer: 0, explanation: 'The IIFE creates a **Singleton** (only one EventBus exists). The `on`/`emit` API implements the **Observer/PubSub pattern** — subscribers register for events and the bus notifies all of them.' },
-    ]
-  },
-  python: {
-    intermediate: [
-      { q: 'What is the output of `[x**2 for x in range(5) if x % 2 == 0]`?', options: ['[0, 4, 16]', '[0, 1, 4, 9, 16]', '[4, 16]', '[1, 4, 9]'], answer: 0, explanation: 'List comprehension with filter. `range(5)` gives 0,1,2,3,4. Even numbers are 0,2,4. Squared: 0,4,16. This is idiomatic Python for functional-style data transformations.' },
-      { q: 'What does the `@property` decorator do in Python?', options: ['Makes a method static', 'Allows a method to be called like an attribute', 'Caches the method result', 'Makes the attribute private'], answer: 1, explanation: '`@property` turns a method into a computed attribute. You access `obj.value` (no parentheses) instead of `obj.value()`. It allows getter/setter logic without changing the public interface.' },
-      { q: 'What is the GIL in Python?', options: ['Global Import Lock', 'Global Interpreter Lock — prevents true multi-threading for CPU-bound tasks', 'Garbage Inspection Layer', 'A security feature'], answer: 1, explanation: 'The GIL (Global Interpreter Lock) ensures only one thread executes Python bytecode at a time. For CPU-bound tasks, use `multiprocessing`. For I/O-bound tasks, threads or `asyncio` still work great.' },
-    ]
-  },
-  react: {
-    intermediate: [
-      { q: 'What triggers a component re-render in React?', options: ['Only state changes', 'State or props changes', 'Only props changes from parent', 'All of the above plus context changes'], answer: 3, explanation: 'A React component re-renders when: (1) its own state changes, (2) its parent re-renders and passes new props, (3) a consumed context value changes, or (4) `forceUpdate()` is called.' },
-      { q: 'What does `useEffect(() => { ... }, [])` do?', options: ['Runs on every render', 'Runs once after mount', 'Runs before render', 'Runs when component unmounts'], answer: 1, explanation: 'An empty dependency array `[]` means the effect runs once after the initial render (like `componentDidMount`). To run on unmount, return a cleanup function from the effect.' },
-      { q: 'What is the Virtual DOM?', options: ['A real DOM node stored in memory', 'A JavaScript object tree that React uses to batch and optimize real DOM updates', 'The Shadow DOM API', 'A browser feature for virtual reality'], answer: 1, explanation: "React's Virtual DOM is a lightweight JS representation of the real DOM. React diffs the new VDOM against the previous one (reconciliation) and only applies the minimal necessary real DOM mutations — making updates very fast." },
-    ]
-  },
-  sql: {
-    intermediate: [
-      { q: 'What is the difference between `INNER JOIN` and `LEFT JOIN`?', options: ['No difference', 'INNER returns matching rows only; LEFT returns all left rows plus matches', 'LEFT returns matching rows only; INNER returns all', 'LEFT JOIN is faster'], answer: 1, explanation: 'INNER JOIN returns only rows where both tables have a match. LEFT JOIN returns ALL rows from the left table, and matching rows from the right (NULLs where no match). Use LEFT JOIN when you need all records regardless of match.' },
-      { q: 'What does `GROUP BY` do in SQL?', options: ['Sorts the results', 'Groups rows sharing a column value, enabling aggregate functions per group', 'Filters rows after aggregation', 'Joins two tables'], answer: 1, explanation: 'GROUP BY collapses multiple rows with the same column value into one group. This allows aggregate functions (COUNT, SUM, AVG, MAX, MIN) to be applied per group rather than across all rows.' },
-    ]
-  },
-  git: {
-    intermediate: [
-      { q: 'What is the difference between `git merge` and `git rebase`?', options: ['They are identical', 'Merge creates a merge commit; rebase rewrites history to apply commits on top of another branch', 'Rebase creates a merge commit; merge rewrites history', 'Merge is faster'], answer: 1, explanation: '`git merge` preserves branch history and creates a merge commit. `git rebase` replays your commits on top of the target branch, creating a linear history. Use merge for shared branches; rebase for cleaning up local work.' },
-      { q: 'What does `git stash` do?', options: ['Permanently deletes uncommitted changes', 'Saves uncommitted changes to a stack and restores a clean working directory', 'Stages all files', 'Creates a new branch'], answer: 1, explanation: '`git stash` temporarily shelves changes so you can switch branches or pull. Use `git stash pop` to restore. Great for when you need to quickly switch context without committing unfinished work.' },
-    ]
-  },
-  nodejs: {
-    intermediate: [
-      { q: 'What is the Event Loop in Node.js?', options: ['A for loop built into Node', 'The mechanism that allows Node.js to handle async I/O non-blocking despite being single-threaded', 'A feature for creating server loops', 'The HTTP request handler'], answer: 1, explanation: 'Node.js uses a single thread + event loop. When async operations (I/O, timers) complete, their callbacks are queued and executed by the event loop. This enables high concurrency without thread overhead.' },
-      { q: 'What does `process.nextTick()` do?', options: ['Schedules a callback to run after all I/O events', 'Schedules a callback to run before the next event loop iteration', 'Delays execution by 1 tick (1ms)', 'Creates a microtask like Promise'], answer: 1, explanation: '`process.nextTick()` queues a callback to fire before the event loop continues to the next phase — even before Promises. Use with caution; overuse can starve I/O events.' },
-    ]
+\`\`\`${currentLang.toLowerCase()}
+${code}
+\`\`\``;
+    const result = await callGemini(prompt);
+    document.getElementById('explainContent').innerHTML = renderMarkdown(result);
+    const out = document.getElementById('explainOutput');
+    out.style.display = 'block';
+    out.classList.add('show');
+    out.scrollIntoView({behavior:'smooth', block:'nearest'});
+    gainXP(50);
+  } catch(e) {
+    if (!e.message.includes('API key')) alert('Error: ' + e.message);
   }
-};
+  btn.innerHTML = '🧠 Explain This Code';
+  btn.disabled = false;
+}
+
+async function simplifyCode() {
+  const code = document.getElementById('codeInput').value.trim();
+  if (!code) { alert('Please paste some code first.'); return; }
+  const btn = document.getElementById('explainBtn');
+  btn.innerHTML = '<div class="spinner"></div> Simplifying...';
+  btn.disabled = true;
+  try {
+    const prompt = `Explain this ${currentLang} code to a complete beginner. Use simple language, analogies, and avoid jargon. Keep it short and friendly. Include a real-world analogy.\n\n\`\`\`\n${code}\n\`\`\``;
+    const result = await callGemini(prompt);
+    document.getElementById('explainContent').innerHTML = renderMarkdown(result);
+    const out = document.getElementById('explainOutput');
+    out.style.display = 'block';
+    out.classList.add('show');
+    gainXP(30);
+  } catch(e) {
+    if (!e.message.includes('API key')) alert('Error: ' + e.message);
+  }
+  btn.innerHTML = '🧠 Explain This Code';
+  btn.disabled = false;
+}
+
+// ══════════════════════════════════════════════════════
+// QUIZ ENGINE (AI-powered)
+// ══════════════════════════════════════════════════════
+let quizTopic = 'JavaScript', quizDiff = 'Intermediate';
+let quizQuestions = [], quizIndex = 0, quizScore = 0, quizAnswered = false;
 
 function selectTopic(card, topic) {
-  document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('selected'));
-  card.classList.add('selected');
-  quizTopic = topic;
+  document.querySelectorAll('.topic-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected'); quizTopic = topic;
 }
-
 function selectDiff(btn, diff) {
-  document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  quizDifficulty = diff;
+  document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected'); quizDiff = diff;
 }
 
-function getQuestions() {
-  const bank = questionBank[quizTopic];
-  if (!bank) return questionBank.javascript.intermediate;
-  return bank[quizDifficulty] || bank.intermediate || Object.values(bank)[0];
-}
+async function startQuiz() {
+  const btn = document.getElementById('startQuizBtn');
+  btn.innerHTML = '<div class="spinner"></div> Generating...';
+  btn.disabled = true;
+  try {
+    const prompt = `Generate exactly 5 multiple-choice quiz questions about ${quizTopic} at ${quizDiff} level for a developer learning quiz.
 
-function startQuiz() {
-  quizQuestions = [...getQuestions()].sort(() => Math.random() - 0.5).slice(0, 5);
-  quizIndex = 0;
-  quizScore = 0;
-  quizAnswered = false;
+Return ONLY a valid JSON array. No markdown, no explanation, just the JSON.
 
-  document.getElementById('quizSetup').classList.add('hide');
-  document.getElementById('quizResults').classList.remove('show');
-  document.getElementById('quizActive').classList.add('show');
-  document.getElementById('nextBtn').style.display = 'none';
-  document.getElementById('explanationReveal').classList.remove('show');
+Format:
+[
+  {
+    "question": "Question text here?",
+    "code": "optional code snippet here or empty string",
+    "options": ["Option A", "Option B", "Option C", "Option D"],
+    "answer": 0,
+    "explanation": "Why the correct answer is correct, with detail."
+  }
+]
 
-  renderQuestion();
+Rules:
+- answer is the 0-based index of the correct option
+- Make questions practical and realistic
+- Include code snippets in at least 3 questions
+- Explanations must be detailed and educational (2-4 sentences)
+- Cover different aspects of ${quizTopic}`;
+
+    const raw = await callGemini(prompt);
+    // Extract JSON from response
+    const jsonMatch = raw.match(/\[[\s\S]*\]/);
+    if (!jsonMatch) throw new Error('Invalid AI response format');
+    quizQuestions = JSON.parse(jsonMatch[0]);
+    if (!Array.isArray(quizQuestions) || quizQuestions.length === 0) throw new Error('No questions generated');
+
+    quizIndex = 0; quizScore = 0; quizAnswered = false;
+    document.getElementById('quizSetup').classList.add('hide');
+    document.getElementById('quizResults').classList.remove('show');
+    document.getElementById('quizActive').classList.add('show');
+    document.getElementById('nextBtn').style.display = 'none';
+    document.getElementById('explanationReveal').classList.remove('show');
+    renderQuestion();
+  } catch(e) {
+    if (!e.message.includes('API key')) alert('Failed to generate quiz: ' + e.message);
+  }
+  btn.innerHTML = '🚀 Generate AI Quiz';
+  btn.disabled = false;
 }
 
 function renderQuestion() {
-  if (quizIndex >= quizQuestions.length) {
-    showResults();
-    return;
-  }
-
+  if (quizIndex >= quizQuestions.length) { showResults(); return; }
   const q = quizQuestions[quizIndex];
   quizAnswered = false;
   document.getElementById('nextBtn').style.display = 'none';
   document.getElementById('explanationReveal').classList.remove('show');
-
-  const total = quizQuestions.length;
-  document.getElementById('qMeta').textContent = `Question ${quizIndex + 1} of ${total}`;
+  document.getElementById('qMeta').textContent = `Question ${quizIndex+1} of ${quizQuestions.length}`;
   document.getElementById('qScore').textContent = `Score: ${quizScore}`;
-  document.getElementById('quizProgressFill').style.width = ((quizIndex / total) * 100) + '%';
-
-  const letters = ['A', 'B', 'C', 'D'];
-  const hasCode = q.q.includes('\n');
-  const parts = q.q.split('\n\n');
-  const questionText = hasCode ? parts[0] : q.q;
-  const codeBlock = hasCode && parts[1] ? `<div class="question-code">${escHtml(parts[1])}</div>` : '';
-
+  document.getElementById('quizProgressFill').style.width = ((quizIndex/quizQuestions.length)*100)+'%';
+  const letters = ['A','B','C','D'];
   document.getElementById('questionCard').innerHTML = `
-    <div class="question-num">Question ${quizIndex + 1}</div>
-    <div class="question-text">${questionText}</div>
-    ${codeBlock}
+    <div class="question-num">Question ${quizIndex+1}</div>
+    <div class="question-text">${escHtml(q.question)}</div>
+    ${q.code ? `<div class="question-code">${escHtml(q.code)}</div>` : ''}
     <div class="options-list">
-      ${q.options.map((opt, i) => `
-        <button class="option-btn" onclick="answerQuestion(${i})" data-index="${i}">
+      ${q.options.map((opt,i)=>`
+        <button class="option-btn" onclick="answerQuestion(${i})">
           <span class="option-letter">${letters[i]}</span>
-          <span class="option-text">${opt}</span>
-        </button>
-      `).join('')}
-    </div>
-  `;
+          <span style="flex:1">${escHtml(opt)}</span>
+        </button>`).join('')}
+    </div>`;
 }
 
 function answerQuestion(selected) {
   if (quizAnswered) return;
   quizAnswered = true;
-
   const q = quizQuestions[quizIndex];
-  const buttons = document.querySelectorAll('.option-btn');
-
-  buttons.forEach((btn, i) => {
+  document.querySelectorAll('.option-btn').forEach((btn,i)=>{
     btn.disabled = true;
-    if (i === q.answer) {
-      btn.classList.add('correct');
-      btn.innerHTML += '<span class="option-icon">✓</span>';
-    } else if (i === selected && selected !== q.answer) {
-      btn.classList.add('wrong');
-      btn.innerHTML += '<span class="option-icon">✗</span>';
-    }
+    if (i === q.answer) { btn.classList.add('correct'); btn.innerHTML += ' ✓'; }
+    else if (i === selected && selected !== q.answer) { btn.classList.add('wrong'); btn.innerHTML += ' ✗'; }
   });
-
-  if (selected === q.answer) {
-    quizScore++;
-    document.getElementById('qScore').textContent = `Score: ${quizScore}`;
-  }
-
-  const reveal = document.getElementById('explanationReveal');
-  reveal.innerHTML = `<strong>${selected === q.answer ? '✓ Correct!' : '✗ Incorrect.'}</strong> ${q.explanation}`;
-  reveal.classList.add('show');
-
+  if (selected === q.answer) quizScore++;
+  document.getElementById('qScore').textContent = `Score: ${quizScore}`;
+  const rev = document.getElementById('explanationReveal');
+  rev.innerHTML = `<strong>${selected===q.answer?'✓ Correct!':'✗ Incorrect.'}</strong> ${escHtml(q.explanation)}`;
+  rev.classList.add('show');
   document.getElementById('nextBtn').style.display = 'inline-flex';
 }
 
 function nextQuestion() {
   quizIndex++;
-  if (quizIndex >= quizQuestions.length) {
-    showResults();
-  } else {
-    renderQuestion();
-  }
+  quizIndex >= quizQuestions.length ? showResults() : renderQuestion();
 }
 
 function showResults() {
   document.getElementById('quizActive').classList.remove('show');
   document.getElementById('quizResults').classList.add('show');
-
-  const total = quizQuestions.length;
-  const pct = Math.round((quizScore / total) * 100);
-  const xp = quizScore * 30 + (pct === 100 ? 50 : 0);
-
+  const total = quizQuestions.length, pct = Math.round((quizScore/total)*100);
+  const xp = quizScore * 30 + (pct===100?50:0);
   document.getElementById('resultsScore').textContent = `${quizScore}/${total}`;
-  document.getElementById('resultsLabel').textContent =
-    pct >= 80 ? '🌟 Excellent! You really know your stuff.' :
-    pct >= 60 ? '👍 Good effort! Review the missed questions.' :
-    '📚 Keep studying — you\'ll get there!';
+  document.getElementById('resultsLabel').textContent = pct>=80?'🌟 Excellent!':pct>=60?'👍 Good effort!':'📚 Keep practicing!';
   document.getElementById('resCorrect').textContent = quizScore;
-  document.getElementById('resWrong').textContent = total - quizScore;
+  document.getElementById('resWrong').textContent = total-quizScore;
   document.getElementById('resXP').textContent = `+${xp}`;
-
-  gainXP(xp, 'quiz completed');
+  gainXP(xp);
 }
 
 function resetQuiz() {
@@ -1630,171 +901,138 @@ function resetQuiz() {
   document.getElementById('quizActive').classList.remove('show');
 }
 
-// ─── DEBUGGER ────────────────────────────────────────────────────────
-const debugSamples = {
-  javascript: {
-    code: `async function fetchUser(id) {
+function startRoadmapQuiz(topic) {
+  showPanel('quiz');
+  const topicMap = { javascript:'JavaScript', python:'Python', react:'React', nodejs:'Node.js', sql:'SQL', git:'Git' };
+  const t = topicMap[topic] || 'JavaScript';
+  document.querySelectorAll('.topic-card').forEach(c=>{
+    c.classList.remove('selected');
+    if(c.querySelector('.t-name')?.textContent===t) c.classList.add('selected');
+  });
+  quizTopic = t;
+}
+
+// ══════════════════════════════════════════════════════
+// DEBUGGER
+// ══════════════════════════════════════════════════════
+const DEBUG_SAMPLE = {
+  code:`async function fetchUser(id) {
   const response = await fetch('/api/user/' + id)
   const data = response.json()  
   return data.user.name
 }`,
-    error: `TypeError: Cannot read properties of undefined (reading 'name')
-  at fetchUser (app.js:4)
-  at async main (app.js:10)`
-  }
+  error:`TypeError: Cannot read properties of undefined (reading 'name')
+  at fetchUser (app.js:4:20)
+  at async main (app.js:10:3)`
 };
 
 function loadDebugSample() {
-  const s = debugSamples[currentDebugLang] || debugSamples.javascript;
-  document.getElementById('debugCode').value = s.code;
-  document.getElementById('debugError').value = s.error;
-  document.getElementById('debugResult').classList.remove('show');
+  document.getElementById('debugCode').value = DEBUG_SAMPLE.code;
+  document.getElementById('debugError').value = DEBUG_SAMPLE.error;
+  document.getElementById('debugOutput').classList.remove('show');
 }
 
 async function analyzeDebug() {
   const code = document.getElementById('debugCode').value.trim();
-  if (!code) return;
-
+  if (!code) { alert('Please paste your code first.'); return; }
+  const error = document.getElementById('debugError').value.trim();
   const btn = document.getElementById('debugBtn');
-  btn.innerHTML = '<div class="spinner" style="border-color:rgba(255,255,255,0.3);border-top-color:#fff"></div> Analyzing...';
+  btn.innerHTML = '<div class="spinner spinner-w"></div> Analyzing...';
   btn.disabled = true;
+  try {
+    const prompt = `You are an expert ${currentDebugLang} debugger. Analyze this code and error, then provide a complete debug report.
 
-  await sleep(1600);
+**Language:** ${currentDebugLang}
+**Code:**
+\`\`\`${currentDebugLang.toLowerCase()}
+${code}
+\`\`\`
+${error ? `**Error:**\n\`\`\`\n${error}\n\`\`\`` : ''}
 
-  const error = document.getElementById('debugError').value;
-  const result = generateDebugResult(code, error, currentDebugLang);
-  renderDebugResult(result);
+Provide:
+## 🔴 Bugs Found
+List every bug with line reference and clear explanation.
 
+## ⚠️ Root Cause
+Explain WHY this bug occurs (the underlying concept).
+
+## ✅ Fixed Code
+Provide the complete corrected code with comments.
+
+## 💡 Prevention Tips
+How to avoid this class of bug in future.
+
+## 🔬 How to Debug This Yourself
+Step-by-step debugging approach for this type of error.`;
+
+    const result = await callGemini(prompt);
+    document.getElementById('debugContent').innerHTML = renderMarkdown(result);
+    document.getElementById('debugOutput').classList.add('show');
+    document.getElementById('debugOutput').scrollIntoView({behavior:'smooth',block:'nearest'});
+    gainXP(40);
+    // update stat
+    const bugEl = document.getElementById('statBugs');
+    bugEl.textContent = parseInt(bugEl.textContent)+1;
+  } catch(e) {
+    if (!e.message.includes('API key')) alert('Error: ' + e.message);
+  }
   btn.innerHTML = '🐛 Analyze & Fix';
   btn.disabled = false;
-  gainXP(40, 'bug analyzed');
 }
 
-function generateDebugResult(code, error, lang) {
-  const bugs = [];
-  const fixes = [];
-
-  // Smart pattern detection
-  if (code.includes('response.json()') && !code.includes('await response.json()')) {
-    bugs.push({ line: 'Line 3', msg: '`response.json()` returns a Promise, not the data. It must be awaited.' });
-    fixes.push({ desc: 'Add `await` before `response.json()`', code: 'const data = await response.json()' });
-  }
-  if (code.includes('data.user.name') && !code.includes('data?.user?.name') && !code.includes('if (data.user)')) {
-    bugs.push({ line: 'Line 4', msg: '`data.user` may be `undefined` if the user is not found, causing a TypeError when accessing `.name`.' });
-    fixes.push({ desc: 'Use optional chaining to safely access nested properties', code: 'return data?.user?.name ?? "Unknown User"' });
-  }
-  if (!code.includes('try') && code.includes('await fetch')) {
-    bugs.push({ line: 'General', msg: 'No error handling for failed network requests. If the fetch fails, the error will be unhandled.' });
-    fixes.push({ desc: 'Wrap with try/catch for proper error handling', code: 'try { ... } catch (err) { console.error(err); throw err; }' });
-  }
-
-  if (code.includes('var ') && lang === 'javascript') {
-    bugs.push({ line: 'Style', msg: '`var` is function-scoped and can cause hoisting issues. Prefer `const` or `let`.' });
-    fixes.push({ desc: 'Replace `var` with `const` or `let`', code: 'const data = ...' });
-  }
-
-  if (bugs.length === 0) {
-    // Generic analysis
-    bugs.push({ line: 'Analysis', msg: 'No critical bugs detected in the surface syntax. The logic appears structurally sound.' });
-    fixes.push({ desc: 'Consider adding input validation and error handling', code: 'if (!id) throw new Error("ID is required");' });
-  }
-
-  return {
-    bugs,
-    fixes,
-    summary: `Found ${bugs.length} issue${bugs.length !== 1 ? 's' : ''}. The primary problem is ${bugs[0]?.msg.split('.')[0].toLowerCase()}.`,
-    rootCause: bugs[0]?.msg || 'Code structure looks correct.'
-  };
-}
-
-function renderDebugResult(result) {
-  const el = document.getElementById('debugResult');
-  el.innerHTML = `
-    <div class="debug-section">
-      <div class="debug-section-title ds-red">🔴 Bugs Found (${result.bugs.length})</div>
-      ${result.bugs.map(b => `
-        <div class="bug-item">
-          <div class="bug-line">${b.line}</div>
-          <div class="bug-msg">${b.msg}</div>
-        </div>
-      `).join('')}
-    </div>
-    <div class="debug-section">
-      <div class="debug-section-title ds-yellow">⚠️ Root Cause</div>
-      <div style="font-size:0.85rem;line-height:1.6;color:var(--text)">${result.rootCause}</div>
-    </div>
-    <div class="debug-section">
-      <div class="debug-section-title ds-green">✅ Suggested Fixes</div>
-      ${result.fixes.map(f => `
-        <div class="fix-item">
-          ${f.desc}
-          ${f.code ? `<div class="fix-code">${escHtml(f.code)}</div>` : ''}
-        </div>
-      `).join('')}
-    </div>
-  `;
-  el.classList.add('show');
-  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-// ─── AI TUTOR ────────────────────────────────────────────────────────
-const tutorKB = {
-  'closure': 'A **closure** is a function that remembers the variables from its outer scope even after that outer function has returned.\n\n```js\nfunction counter() {\n  let count = 0;\n  return () => ++count;\n}\nconst inc = counter();\ninc(); // 1\ninc(); // 2\n```\n\nHere, `inc` "closes over" the `count` variable. Even though `counter()` has finished, `count` lives on inside `inc`. Closures power patterns like debounce, memoize, and module pattern.',
-
-  'async': '**async/await** is syntactic sugar over Promises that makes async code look synchronous.\n\n```js\n// Promise chain\nfetch(url)\n  .then(r => r.json())\n  .then(data => use(data))\n  .catch(err => handle(err));\n\n// async/await (cleaner!)\nasync function load() {\n  try {\n    const r = await fetch(url);\n    const data = await r.json();\n    use(data);\n  } catch (err) { handle(err); }\n}\n```\n\n`await` pauses the async function until the Promise resolves. The rest of your program keeps running — it\'s non-blocking.',
-
-  'promise': 'A **Promise** represents a value that will be available in the future. It has 3 states: **pending**, **fulfilled**, or **rejected**.\n\n```js\nconst p = new Promise((resolve, reject) => {\n  setTimeout(() => resolve("done!"), 1000);\n});\np.then(v => console.log(v)); // "done!" after 1s\n```\n\nKey methods: `.then()`, `.catch()`, `.finally()`, `Promise.all()`, `Promise.race()`.',
-
-  'react reconciliation': '**React Reconciliation** is how React efficiently updates the DOM.\n\n1. When state/props change, React creates a new Virtual DOM tree\n2. It **diffs** the new tree against the previous one (O(n) algorithm)\n3. Only the actual differences are applied to the real DOM\n\nThe `key` prop helps React identify list items during reconciliation. Without keys, React may incorrectly reuse DOM nodes.',
-
-  '== and ===': '`==` uses **type coercion** (loose equality) — it converts types before comparing.\n`===` uses **strict equality** — no type conversion.\n\n```js\n0 == false   // true  (coercion!)\n0 === false  // false (different types)\n"" == false  // true\nnull == undefined // true\nnull === undefined // false\n```\n\nAlways use `===` unless you specifically need type coercion.',
-
-  'big o': '**Big O** notation describes how an algorithm\'s time/space grows as input size (n) increases.\n\n| Notation | Name | Example |\n|---|---|---|\n| O(1) | Constant | Array lookup |\n| O(log n) | Logarithmic | Binary search |\n| O(n) | Linear | Array scan |\n| O(n log n) | Linearithmic | Merge sort |\n| O(n²) | Quadratic | Nested loops |\n| O(2ⁿ) | Exponential | Naive recursion |\n\nFocus on the **worst case** and **dominant term** only.',
-
-  'rest api': 'A **REST API** (Representational State Transfer) is an architectural style for web services.\n\n**Core principles:**\n- **Stateless** — each request contains all needed info\n- **Resources** identified by URLs: `/users/42`\n- **HTTP verbs** define the action:\n  - GET — read\n  - POST — create\n  - PUT/PATCH — update\n  - DELETE — remove\n\n**Example:**\n```\nGET  /api/users      → list users\nPOST /api/users      → create user\nGET  /api/users/42   → get user 42\nDELETE /api/users/42 → delete user 42\n```'
-};
-
-function findTutorResponse(q) {
-  const lq = q.toLowerCase();
-  if (lq.includes('closure')) return tutorKB['closure'];
-  if (lq.includes('async') || lq.includes('await')) return tutorKB['async'];
-  if (lq.includes('promise')) return tutorKB['promise'];
-  if (lq.includes('reconcil') || (lq.includes('react') && lq.includes('work'))) return tutorKB['react reconciliation'];
-  if (lq.includes('== and ===') || lq.includes('=== and ==') || lq.includes('double equal') || lq.includes('triple equal')) return tutorKB['== and ==='];
-  if (lq.includes('big o') || lq.includes('complexity') || lq.includes('notation')) return tutorKB['big o'];
-  if (lq.includes('rest') || lq.includes('api')) return tutorKB['rest api'];
-
-  // Generic smart fallback
-  const topic = q.length > 60 ? q.substring(0, 60) + '...' : q;
-  return `Great question about **"${topic}"**!\n\nHere's a structured breakdown:\n\n**What it is:** This concept is a fundamental building block in modern software development. Understanding it deeply will help you write better, more maintainable code.\n\n**Why it matters:** It solves a specific class of problems efficiently — either in terms of code organization, performance, or reliability.\n\n**When to use it:** Apply this pattern when you need to handle ${lq.includes('error') ? 'failures gracefully' : lq.includes('data') ? 'data transformations cleanly' : 'complex interactions between components'}.\n\n**Quick tip:** Study real-world examples in open-source projects — seeing it used in production code accelerates understanding. Try the Quiz panel to test yourself!\n\n*Ask me for a specific code example or comparison and I'll generate one for you!*`;
-}
-
-function renderChatMarkdown(text) {
-  return text
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/```[\w]*\n([\s\S]*?)```/g, '<div class="step-code" style="margin:8px 0">$1</div>')
-    .replace(/\n\n/g, '<br><br>')
-    .replace(/\n/g, '<br>');
-}
+// ══════════════════════════════════════════════════════
+// AI TUTOR CHAT
+// ══════════════════════════════════════════════════════
+const chatHistory = [];
 
 async function sendChat() {
   const input = document.getElementById('chatInput');
   const msg = input.value.trim();
   if (!msg) return;
-
   input.value = '';
-  addChatMsg('user', msg);
+  const sendBtn = document.getElementById('sendBtn');
+  sendBtn.disabled = true;
+  addChatMsg('user', escHtml(msg));
+  chatHistory.push({ role:'user', content: msg });
+  const typingId = addTyping();
 
-  // Typing indicator
-  const typingId = addTypingIndicator();
+  try {
+    // Build context from last 6 messages
+    const contextMsgs = chatHistory.slice(-6).map(m=>
+      `${m.role==='user'?'Student':'Tutor'}: ${m.content}`).join('\n');
 
-  await sleep(900 + Math.random() * 600);
+    const prompt = `You are DevMind, an expert AI programming tutor. You're helping a developer learn.
 
-  removeTypingIndicator(typingId);
-  const response = findTutorResponse(msg);
-  addChatMsg('ai', renderChatMarkdown(response));
-  gainXP(20, 'tutor interaction');
+Conversation so far:
+${contextMsgs}
+
+Student just asked: "${msg}"
+
+Respond as an expert tutor:
+- Give a thorough, accurate, educational answer
+- Use code examples (in markdown code blocks) to illustrate concepts
+- Use analogies to make complex ideas simple
+- Structure your answer clearly with headers if it's long
+- If it's a coding question, show working code
+- Be encouraging and conversational
+- If the question is about debugging, provide the fix
+- Cover edge cases and common mistakes
+
+Answer:`;
+
+    const result = await callGemini(prompt);
+    removeTyping(typingId);
+    chatHistory.push({ role:'assistant', content: result });
+    addChatMsg('ai', renderMarkdown(result));
+    gainXP(20);
+  } catch(e) {
+    removeTyping(typingId);
+    if (!e.message.includes('API key')) {
+      addChatMsg('ai', `<span style="color:var(--red)">Error: ${escHtml(e.message)}</span>`);
+    }
+  }
+  sendBtn.disabled = false;
+  input.focus();
 }
 
 function sendChip(el) {
@@ -1807,62 +1045,65 @@ function addChatMsg(role, html) {
   const div = document.createElement('div');
   div.className = `chat-msg ${role}`;
   div.innerHTML = `
-    <div class="chat-avatar ${role === 'ai' ? 'avatar-ai' : 'avatar-user'}">${role === 'ai' ? 'AI' : '👤'}</div>
-    <div class="chat-bubble">${html}</div>
-  `;
+    <div class="chat-avatar ${role==='ai'?'avatar-ai':'avatar-user'}">${role==='ai'?'AI':'👤'}</div>
+    <div class="chat-bubble">${html}</div>`;
   win.appendChild(div);
   win.scrollTop = win.scrollHeight;
 }
 
-function addTypingIndicator() {
+function addTyping() {
   const win = document.getElementById('chatWindow');
-  const id = 'typing-' + Date.now();
+  const id = 'typing_'+Date.now();
   const div = document.createElement('div');
-  div.className = 'chat-msg ai';
-  div.id = id;
-  div.innerHTML = `
-    <div class="chat-avatar avatar-ai">AI</div>
-    <div class="chat-bubble"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>
-  `;
+  div.className = 'chat-msg ai'; div.id = id;
+  div.innerHTML = `<div class="chat-avatar avatar-ai">AI</div><div class="chat-bubble"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`;
   win.appendChild(div);
   win.scrollTop = win.scrollHeight;
   return id;
 }
 
-function removeTypingIndicator(id) {
-  const el = document.getElementById(id);
-  if (el) el.remove();
-}
+function removeTyping(id) { document.getElementById(id)?.remove(); }
 
-// ─── XP SYSTEM ───────────────────────────────────────────────────────
-let totalXP = 1240;
-function gainXP(amount, reason) {
+// ══════════════════════════════════════════════════════
+// XP SYSTEM
+// ══════════════════════════════════════════════════════
+let totalXP = parseInt(localStorage.getItem('devmind_xp')||'1240');
+
+function gainXP(amount) {
   totalXP += amount;
-  // Subtle notification
-  const notif = document.createElement('div');
-  notif.style.cssText = `
-    position:fixed; bottom:20px; right:20px;
-    background:rgba(88,166,255,0.15);
-    border:1px solid rgba(88,166,255,0.4);
-    color:#58a6ff;
-    padding:8px 14px;
-    border-radius:8px;
-    font-size:0.82rem;
-    font-weight:600;
-    z-index:999;
-    animation: fadeIn 0.3s ease;
-    pointer-events:none;
-  `;
-  notif.textContent = `+${amount} XP`;
-  document.body.appendChild(notif);
-  setTimeout(() => { notif.style.opacity = '0'; notif.style.transition = 'opacity 0.5s'; }, 1500);
-  setTimeout(() => notif.remove(), 2100);
+  localStorage.setItem('devmind_xp', totalXP);
+  const level = Math.floor(totalXP / 2000) + 1;
+  const pct = ((totalXP % 2000) / 2000 * 100).toFixed(0);
+  document.getElementById('levelNum').textContent = level;
+  document.getElementById('xpFill').style.width = pct + '%';
+  document.getElementById('xpSub').textContent = `${(totalXP%2000).toLocaleString()} / 2,000 XP`;
+  showToast(`+${amount} XP`);
 }
 
-// ─── UTILS ───────────────────────────────────────────────────────────
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'xp-toast'; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .5s'; },1800);
+  setTimeout(()=>t.remove(),2400);
+}
+
+// ══════════════════════════════════════════════════════
+// UTILITIES
+// ══════════════════════════════════════════════════════
 function escHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function copyOutput(id) {
+  const el = document.getElementById(id);
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(()=>showToast('📋 Copied!')).catch(()=>{
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta); showToast('📋 Copied!');
+  });
 }
 </script>
 </body>
